@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "lookaround"
 include(":app")
- 
+include(":core:network")
+include(":core:database")
+include(":core:domain")
+include(":core:data")
+include(":feature:main")
