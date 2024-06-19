@@ -1,4 +1,4 @@
-package kky.flab.lookaround
+package kky.flab.lookaround.feature.main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
