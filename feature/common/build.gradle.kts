@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "kky.flab.lookaround.feature.main"
+    namespace = "kky.flab.lookaround.feature.common"
     compileSdk = 34
 
     defaultConfig {
@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

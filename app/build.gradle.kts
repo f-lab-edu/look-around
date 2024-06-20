@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation(project(":feature:main"))
+    implementation(project(":feature:common"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
