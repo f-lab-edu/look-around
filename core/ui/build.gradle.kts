@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "kky.flab.lookaround.feature.common"
+    namespace = "kky.flab.lookaround.core.ui"
     compileSdk = 34
 
     defaultConfig {

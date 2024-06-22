@@ -1,4 +1,4 @@
-package kky.flab.lookaround.feature.main
+package kky.flab.lookaround.core.ui
 
 import org.junit.Test
 
