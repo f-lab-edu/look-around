@@ -3,4 +3,7 @@
     <dimen name="design_bottom_navigation_text_size" tools:override="true">12dp</dimen>
     <dimen name="design_bottom_navigation_active_text_size" tools:override="true">12dp</dimen>
     <dimen name="design_bottom_navigation_icon_size" tools:override="true">18dp</dimen>
+
+    <dimen name="layout_space">16dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
 </resources>
