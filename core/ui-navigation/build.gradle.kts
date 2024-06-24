@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "kky.flab.lookaround.feature.main"
+    namespace = "kky.flab.lookaround.core.ui_navigation"
     compileSdk = 34
 
     defaultConfig {
@@ -30,21 +30,18 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    viewBinding {
-        enable = true
-    }
 }
 
 dependencies {
-    implementation(project(":core:ui"))
-    implementation(project(":core:ui-navigation"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:record"))
+    implementation(project(":feature:setting"))
+
+    implementation(libs.android.navigation.fragment)
+    implementation(libs.android.navigation.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.android.navigation.fragment)
-    implementation(libs.android.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
