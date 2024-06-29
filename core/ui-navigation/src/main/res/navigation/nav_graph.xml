@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_home">
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="kky.flab.lookaround.feature.home.HomeFragment"
+        android:label="home_fragment">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_record"
+        android:name="kky.flab.lookaround.feature.record.RecordFragment"
+        android:label="record_fragment">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_setting"
+        android:name="kky.flab.lookaround.feature.setting.SettingFragment"
+        android:label="setting_fragment">
+    </fragment>
+
+</navigation>

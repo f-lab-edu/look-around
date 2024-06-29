@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.1"
-kotlin = "1.9.0"
+kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -11,6 +11,31 @@ material = "1.12.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 jetbrainsKotlinJvm = "1.9.0"
+fragmentKtx = "1.5.2"
+android-navigation = "2.7.7"
+
+#https://github.com/Kotlin/kotlinx.coroutines/releases
+coroutine = "1.8.1"
+
+#Room
+#https://developer.android.com/jetpack/androidx/releases/room?hl=ko
+room = "2.6.1"
+
+
+ksp = "1.9.24-1.0.20"
+
+#moshi
+#https://github.com/square/moshi/tags
+moshi = "1.15.1"
+
+#Retrofit2
+#https://github.com/square/retrofit/releases
+retrofit2 = "2.11.0"
+
+#Dagger-Hilt
+#https://github.com/google/dagger/releases
+hilt = "2.51.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,10 +54,29 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx"}
+android-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "android-navigation"}
+android-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "android-navigation"}
+
+aac-room = { module = "androidx.room:room-runtime", version.ref = "room" }
+aac-roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+aac-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi"}
+moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi"}
+moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi"}
+moshi-retrofit2-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit2"}
+
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt"}
+hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
+
+coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+hiltPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 
