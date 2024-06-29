@@ -8,16 +8,16 @@ interface RecordRepository {
 
     val recording: StateFlow<Boolean>
 
-    fun saveRecord(record: Record): Long
-
     fun getRecords(
     ): Flow<List<Record>>
 
-    fun updateRecord(
+    suspend fun saveRecord(record: Record): Long
+
+    suspend fun updateRecord(
         record: Record
     )
 
-    fun deleteRecord(
+    suspend fun deleteRecord(
         record: Record
     )
 
