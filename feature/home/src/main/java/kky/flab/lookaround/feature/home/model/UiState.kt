@@ -5,5 +5,5 @@ internal sealed interface UiState
 internal data object Loading: UiState
 
 internal data class Result(
-    val start: Boolean
+    val recording: Boolean
 ): UiState

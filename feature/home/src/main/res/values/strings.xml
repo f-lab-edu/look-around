@@ -2,7 +2,7 @@
     <string name="status_on_message">지금은 산책중이에요🚶</string>
     <string name="status_off_message">지금은 산책중이 아니에요</string>
 
-    <string name="status_on_sub_message">산책을 종료할까요?</string>
-    <string name="status_off_sub_message">산책을 시작해볼까요?</string>
+    <string name="status_on_sub_message">누르면 산책을 종료합니다.</string>
+    <string name="status_off_sub_message">누르면 산책을 시작합니다.</string>
 
 </resources>

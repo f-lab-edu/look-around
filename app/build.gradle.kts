@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hiltPlugin)
 }
 
 android {
@@ -52,6 +54,9 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
+    implementation(libs.hilt)
+    ksp(libs.hiltCompiler)
+
 //    implementation(libs.androidx.material3)
 //    testImplementation(libs.junit)
 //    androidTestImplementation(libs.androidx.junit)
@@ -63,4 +68,5 @@ dependencies {
 //    implementation(libs.androidx.ui)
 //    implementation(libs.androidx.ui.graphics)
 //    implementation(libs.androidx.ui.tooling.preview)
+
 }

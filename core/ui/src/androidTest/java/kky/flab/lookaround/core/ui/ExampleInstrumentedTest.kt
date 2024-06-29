@@ -1,4 +1,4 @@
-package kky.flab.lookaround.feature.ui
+package kky.flab.lookaround.core.ui
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
