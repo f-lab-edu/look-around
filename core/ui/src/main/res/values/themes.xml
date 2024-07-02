@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="MyBottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+       <item name="colorControlHighlight">#00000000</item>
+        <item name="android:background">@color/white</item>
+        <item name="background">@color/white</item>
+        <item name="itemBackground">@color/white</item>
+        <item name="itemActiveIndicatorStyle">@color/transparent</item>
+    </style>
+    <style name="Theme.Lookaround" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="bottomNavigationStyle">@style/MyBottomNavigationViewStyle</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+</resources>
