@@ -22,6 +22,9 @@ internal object WeatherMapper {
         val thunderStroke: Double = items.find { it.category == "LGT" }?.value
             ?: error("낙뢰에 대한 값이 없습니다.")
 
+        val windSpeed: Int = items.find { it.category == "WSD" }?.value?.toInt()
+            ?: error("풍속에 대한 값이 없습니다.")
+
         val skyType: Weather.Sky = when {
             sky == 1 && precipitation == 0.0 -> Weather.Sky.SUNNY
             sky == 3 && precipitation == 0.0 -> Weather.Sky.CLOUDY
@@ -35,7 +38,8 @@ internal object WeatherMapper {
             precipitation = precipitation,
             thunderStroke = thunderStroke,
             temperatures = temperature,
-            time = items.first().fcstTime
-        )
+            windSpeed = windSpeed,
+            time = items.first().fcstTime,
+            )
     }
 }
