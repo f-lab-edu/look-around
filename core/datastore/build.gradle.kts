@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "kky.flab.lookaround.core.data"
+    namespace = "kky.flab.lookaround.core.datastore"
     compileSdk = 34
 
     defaultConfig {
@@ -15,8 +13,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "WEATHER_SERVICE_KEY", getApiKey("WEATHER_SERVICE_KEY"))
     }
 
     buildTypes {
@@ -37,31 +33,12 @@ android {
     }
 }
 
-fun getApiKey(propertyKey: String): String = gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
-
 dependencies {
-    implementation(project(":core:database"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:network"))
-    implementation(project(":core:datastore"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.aac.room)
-    implementation(libs.aac.room.ktx)
-    ksp(libs.aac.roomCompiler)
-
-    implementation(libs.moshi)
-    implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.codegen)
-
+    implementation(libs.androidx.datastore)
     implementation(libs.hilt)
     ksp(libs.hiltCompiler)
-
-    implementation(libs.androidx.datastore)
 }
