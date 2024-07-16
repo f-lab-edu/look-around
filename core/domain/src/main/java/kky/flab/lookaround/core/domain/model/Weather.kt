@@ -12,7 +12,7 @@ data class Weather(
     //예보 시간
     val time: String,
     //풍속
-    val windSpeed: Int
+    val windSpeed: Int,
 ) {
     enum class Sky{
         SUNNY,

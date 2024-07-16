@@ -4,7 +4,7 @@ data class Setting(
     val requestFineLocation: Boolean,
     val requestBackgroundLocation: Boolean,
     val requestReadStorage: Boolean,
-    val darkTheme: Boolean
+    val darkTheme: Boolean,
 ) {
     companion object {
         val Default = Setting(

@@ -184,7 +184,7 @@ class HomeFragment : Fragment() {
         var shouldShowRationale = true
 
         for (permission in permissions) {
-            if (!shouldShowRequestPermissionRationale(permission)) {
+            if (shouldShowRequestPermissionRationale(permission).not()) {
                 shouldShowRationale = false
                 break
             }
