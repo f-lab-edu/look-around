@@ -1,12 +1,12 @@
 package kky.flab.lookaround.core.data
 
-import kky.flab.lookaround.core.data.mapper.RecordMapper
+import kky.flab.lookaround.core.data.mapper.toData
+import kky.flab.lookaround.core.data.mapper.toDomain
 import kky.flab.lookaround.core.database.dao.RecordDao
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.model.Record
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -16,28 +16,28 @@ internal class RecordRepositoryImpl @Inject constructor(
 ): RecordRepository {
 
     private val _recording: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    override val recording: StateFlow<Boolean> = _recording.asStateFlow()
+    override val recording: Flow<Boolean> = _recording.asStateFlow()
 
     override suspend fun saveRecord(record: Record): Long {
         return recordDao.insertRecord(
-            RecordMapper.domainToData(record)
+            record.toData()
         )
     }
 
     override fun getRecords(): Flow<List<Record>> =
         recordDao.getRecord().map { entities ->
-            entities.map { RecordMapper.dataToDomain(it) }
+            entities.map { it.toDomain() }
         }
 
     override suspend fun updateRecord(record: Record) {
         recordDao.updateRecord(
-            RecordMapper.domainToData(record)
+            record.toData()
         )
     }
 
     override suspend fun deleteRecord(record: Record) {
         recordDao.deleteRecord(
-            RecordMapper.domainToData(record)
+            record.toData()
         )
     }
 

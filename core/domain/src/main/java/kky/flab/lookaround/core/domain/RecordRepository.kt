@@ -6,20 +6,15 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface RecordRepository {
 
-    val recording: StateFlow<Boolean>
+    val recording: Flow<Boolean>
 
-    fun getRecords(
-    ): Flow<List<Record>>
+    fun getRecords(): Flow<List<Record>>
 
     suspend fun saveRecord(record: Record): Long
 
-    suspend fun updateRecord(
-        record: Record
-    )
+    suspend fun updateRecord(record: Record)
 
-    suspend fun deleteRecord(
-        record: Record
-    )
+    suspend fun deleteRecord(record: Record)
 
     fun startRecording()
 

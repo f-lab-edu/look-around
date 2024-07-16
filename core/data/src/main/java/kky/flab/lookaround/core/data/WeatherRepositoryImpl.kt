@@ -1,6 +1,6 @@
 package kky.flab.lookaround.core.data
 
-import kky.flab.lookaround.core.data.mapper.WeatherMapper
+import kky.flab.lookaround.core.data.mapper.toDomain
 import kky.flab.lookaround.core.domain.WeatherRepository
 import kky.flab.lookaround.core.domain.model.Weather
 import kky.flab.lookaround.core.network.api.WeatherApi
@@ -33,6 +33,6 @@ class WeatherRepositoryImpl @Inject constructor(
             serviceKey = serviceKey
         )
 
-        return WeatherMapper.dataToDomain(result.response)
+        return result.response.toDomain()
     }
 }
