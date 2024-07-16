@@ -44,6 +44,10 @@ datastore = "1.1.1"
 #https://developers.google.com/android/guides/setup?hl=ko
 play-service-location = "21.3.0"
 
+#https://mvnrepository.com/artifact/org.apache.poi
+poi = "3.9"
+
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -68,6 +72,8 @@ androidx-datastore = { group = "androidx.datastore", name = "datastore-preferenc
 retrofit2-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2"}
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
 google-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-service-location" }
+poi-common = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
+poi-oomxl = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
 
 
 aac-room = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -97,4 +103,9 @@ retrofit2 = [
     "retrofit2-core",
     "moshi-retrofit2-converter",
     "okhttp3-logging-interceptor"
+]
+
+poi = [
+    "poi-common",
+    "poi-oomxl"
 ]
