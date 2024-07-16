@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lookaround"
         android:name=".GlobalApplication"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
     </application>

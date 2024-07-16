@@ -51,7 +51,167 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_message" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
+        <!-- 날씨데이터 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/weather_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/status_card"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+                <!-- 로딩 -->
+                <ProgressBar
+                    android:id="@+id/pb_weather"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <!-- 에러 -->
+                <TextView
+                    android:id="@+id/tv_weather_error"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="날씨를 불러오는 데 실패하였습니다." />
+
+                <TextView
+                    android:id="@+id/bt_weather_retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_button_outline"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:text="재시도"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_weather_error" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/weather_fail_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="tv_weather_error,bt_weather_retry" />
+
+                <!-- 날씨 -->
+                <ImageView
+                    android:id="@+id/img_sky"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/sunny" />
+
+                <TextView
+                    android:id="@+id/tv_temperatures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="기온"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/tv_temperatures_data"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_sky" />
+
+                <TextView
+                    android:id="@+id/tv_temperatures_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
+                    app:layout_constraintEnd_toStartOf="@id/tv_precipitation"
+                    app:layout_constraintStart_toEndOf="@id/tv_temperatures"
+                    app:layout_constraintTop_toTopOf="@id/tv_temperatures"
+                    tools:text="16도" />
+
+                <TextView
+                    android:id="@+id/tv_precipitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="강수량"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
+                    app:layout_constraintEnd_toStartOf="@id/tv_precipitation_data"
+                    app:layout_constraintStart_toEndOf="@id/tv_temperatures_data"
+                    app:layout_constraintTop_toTopOf="@id/tv_temperatures" />
+
+                <TextView
+                    android:id="@+id/tv_precipitation_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
+                    app:layout_constraintEnd_toStartOf="@id/tv_wind_speed"
+                    app:layout_constraintStart_toEndOf="@id/tv_precipitation"
+                    app:layout_constraintTop_toTopOf="@id/tv_temperatures"
+                    tools:text="10mm" />
+
+                <TextView
+                    android:id="@+id/tv_wind_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="풍속"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
+                    app:layout_constraintEnd_toStartOf="@id/tv_wind_speed_data"
+                    app:layout_constraintStart_toEndOf="@id/tv_precipitation_data"
+                    app:layout_constraintTop_toTopOf="@id/tv_temperatures" />
+
+                <TextView
+                    android:id="@+id/tv_wind_speed_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
+                    app:layout_constraintTop_toTopOf="@id/tv_temperatures"
+                    tools:text="10m/s" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/weather_result_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="img_sky,tv_temperatures,tv_temperatures_data,
+                    tv_precipitation,tv_precipitation_data,tv_wind_speed,tv_wind_speed_data" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
