@@ -49,7 +49,7 @@ internal class HomeViewModel @Inject constructor(
         recordRepository.getRecords()
             .catch {
                 _effect.tryEmit(
-                    Error(
+                    Effect.Error(
                         message = it.message ?: "알 수 없는 오류가 발생했습니다."
                     )
                 )
@@ -63,10 +63,13 @@ internal class HomeViewModel @Inject constructor(
             cachedConfig = it
         }.launchIn(viewModelScope)
 
-        recordRepository.recording.onEach {
-            _state.value = _state.value.copy(
-                recording = it
-            )
+        recordRepository.recording.onEach { recording ->
+            if (recording) {
+                _effect.tryEmit(Effect.StartRecordingService)
+            } else {
+                _effect.tryEmit(Effect.StopRecordingService)
+            }
+
             _state.update { it.copy(recording = recording) }
         }.launchIn(viewModelScope)
     }
@@ -75,9 +78,9 @@ internal class HomeViewModel @Inject constructor(
         val recording = state.value.recording
 
         if (recording) {
-            _effect.tryEmit(ShowEndRecordingMessage())
+            _effect.tryEmit(Effect.ShowEndRecordingMessage())
         } else {
-            _effect.tryEmit(ShowStartRecordingMessage())
+            _effect.tryEmit(Effect.ShowStartRecordingMessage())
         }
     }
 

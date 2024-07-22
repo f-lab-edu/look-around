@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,11 +42,28 @@ class HomeFragment : Fragment() {
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            viewModel.updateRequestedFinLocation()
-
+            if (result.containsKey(Manifest.permission.ACCESS_FINE_LOCATION)
+                || result.containsKey(Manifest.permission.ACCESS_COARSE_LOCATION)
+            ) {
+                if (isRequestedPermission.not()) {
+                    viewModel.updateRequestedFinLocation()
+                }
+            } else if (result.containsKey(Manifest.permission.POST_NOTIFICATIONS)) {
+                requireContext().startForegroundService(
+                    Intent(
+                        requireActivity(),
+                        RecordService::class.java
+                    )
+                )
+            }
         }
 
     private var isRequestedPermission: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkPermission()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,11 +82,11 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         binding.statusCard.setOnClickListener {
-            viewModel.showRecordingMessage()
+            startRecording()
         }
 
         binding.btWeatherRetry.setOnClickListener {
-            viewModel.loadWeather(requireContext())
+            loadWeather()
         }
     }
 
@@ -188,13 +204,14 @@ class HomeFragment : Fragment() {
 
     private fun showPermissionRationaleDialog(onPositiveButtonListener: (DialogInterface, Int) -> Unit) {
         val dialog = AlertDialog.Builder(requireActivity()).apply {
-            setMessage("현재 날씨 정보를 가져오기 위해서 위치 권한이 필요합니다.")
+            setMessage("서비스를 이용하기 위해 자세한 위치 권한을 허용해주세요.")
             setPositiveButton("확인", onPositiveButtonListener)
             setCancelable(false)
         }
 
         dialog.show()
     }
+
 
     private fun checkPermission() {
         val permissions = arrayOf(
@@ -225,7 +242,7 @@ class HomeFragment : Fragment() {
             }
 
             if (granted) {
-                viewModel.loadWeather(requireContext())
+                loadWeather()
             } else {
                 showPermissionRationaleDialog { _, _ ->
                     if (isRequestedPermission) {
@@ -245,6 +262,41 @@ class HomeFragment : Fragment() {
     private fun requestPermission(permissions: Array<String>) {
         permissionLauncher.launch(permissions)
     }
+
+    private fun startRecording() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            showPermissionRationaleDialog { _, _ ->
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:${requireContext().packageName}")
+                )
+                startActivity(intent)
+            }
+            return
+        }
+
+        val locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER).not()) {
+            val dialog = AlertDialog.Builder(requireContext()).apply {
+                setMessage("서비스를 이용하기 위해 GPS를 켜주세요.")
+                setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                setCancelable(false)
+            }
+
+            dialog.show()
+            return
+        }
+
+        viewModel.showRecordingMessage()
+    }
+
     private fun loadWeather() {
         lifecycleScope.launch {
             val context = requireContext()
