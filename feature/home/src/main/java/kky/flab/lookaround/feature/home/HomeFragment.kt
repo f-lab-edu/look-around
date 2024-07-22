@@ -1,9 +1,11 @@
 package kky.flab.lookaround.feature.home
 
 import android.Manifest
+import android.content.Context.LOCATION_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -19,19 +21,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.model.Weather
+import kky.flab.lookaround.core.ui.util.getAddress
+import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
 import kky.flab.lookaround.feature.home.databinding.FragmentHomeBinding
-import kky.flab.lookaround.feature.home.model.Error
-import kky.flab.lookaround.feature.home.model.ShowEndRecordingMessage
-import kky.flab.lookaround.feature.home.model.ShowStartRecordingMessage
+import kky.flab.lookaround.feature.home.model.Effect
 import kky.flab.lookaround.feature.home.model.WeatherUiState
+import kky.flab.lookaround.feature.home.service.RecordService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -75,9 +77,8 @@ class HomeFragment : Fragment() {
     private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.setting.collect {
+                viewModel.config.collect {
                     isRequestedPermission = it.requestFineLocation
-                    checkPermission()
                 }
             }
         }
@@ -95,16 +96,36 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.effect.collect {
                     when (it) {
-                        is ShowEndRecordingMessage,
-                        is ShowStartRecordingMessage,
+                        is Effect.Error -> Toast.makeText(
+                            requireActivity(),
+                            it.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        is Effect.ShowEndRecordingMessage,
+                        is Effect.ShowStartRecordingMessage,
                         -> {
                             showRecordingDialog(it.message) { _, _ ->
                                 viewModel.toggleRecording()
                             }
                         }
 
-                        is Error -> {
-                            Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                        Effect.StartRecordingService -> {
+                            requireContext().startForegroundService(
+                                Intent(
+                                    requireActivity(),
+                                    RecordService::class.java
+                                )
+                            )
+                        }
+
+                        Effect.StopRecordingService -> {
+                            requireContext().stopService(
+                                Intent(
+                                    requireActivity(),
+                                    RecordService::class.java
+                                )
+                            )
                         }
                     }
                 }
@@ -223,5 +244,16 @@ class HomeFragment : Fragment() {
 
     private fun requestPermission(permissions: Array<String>) {
         permissionLauncher.launch(permissions)
+    }
+    private fun loadWeather() {
+        lifecycleScope.launch {
+            val context = requireContext()
+            val address = getAddress(context) ?: return@launch
+            val parseResult = withContext(Dispatchers.IO) {
+                XlsxParser.findXY(context, address)
+            }
+
+            viewModel.loadWeather(parseResult.nx, parseResult.ny)
+        }
     }
 }

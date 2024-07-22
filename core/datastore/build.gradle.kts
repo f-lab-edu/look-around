@@ -6,10 +6,10 @@ plugins {
 
 android {
     namespace = "kky.flab.lookaround.core.datastore"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 28
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

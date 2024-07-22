@@ -1,23 +1,16 @@
 package kky.flab.lookaround.feature.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kky.flab.lookaround.core.domain.model.Setting
-import kky.flab.lookaround.core.domain.SettingRepository
 import kky.flab.lookaround.core.domain.RecordRepository
+import kky.flab.lookaround.core.domain.ConfigRepository
 import kky.flab.lookaround.core.domain.WeatherRepository
-import kky.flab.lookaround.core.ui.util.getAddress
-import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
+import kky.flab.lookaround.core.domain.model.Config
 import kky.flab.lookaround.feature.home.model.Effect
-import kky.flab.lookaround.feature.home.model.Error
 import kky.flab.lookaround.feature.home.model.RecordUiState
-import kky.flab.lookaround.feature.home.model.ShowEndRecordingMessage
-import kky.flab.lookaround.feature.home.model.ShowStartRecordingMessage
 import kky.flab.lookaround.feature.home.model.UiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,15 +21,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
     private val weatherRepository: WeatherRepository,
-    private val settingRepository: SettingRepository,
+    private val configRepository: ConfigRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<UiState> = MutableStateFlow(UiState.EMPTY)
@@ -48,9 +41,9 @@ internal class HomeViewModel @Inject constructor(
     )
     val effect: SharedFlow<Effect> = _effect.asSharedFlow()
 
-    private lateinit var cachedSetting: Setting
+    private lateinit var cachedConfig: Config
 
-    val setting = settingRepository.settingFlow
+    val config = configRepository.configFlow
 
     init {
         recordRepository.getRecords()
@@ -66,14 +59,15 @@ internal class HomeViewModel @Inject constructor(
                 )
             }.launchIn(viewModelScope)
 
-        settingRepository.settingFlow.onEach {
-            cachedSetting = it
+        configRepository.configFlow.onEach {
+            cachedConfig = it
         }.launchIn(viewModelScope)
 
         recordRepository.recording.onEach {
             _state.value = _state.value.copy(
                 recording = it
             )
+            _state.update { it.copy(recording = recording) }
         }.launchIn(viewModelScope)
     }
 
@@ -99,23 +93,23 @@ internal class HomeViewModel @Inject constructor(
 
     fun updateRequestedFinLocation() {
         viewModelScope.launch {
-            settingRepository.updateConfig(
-                cachedSetting.copy(
+            configRepository.updateConfig(
+                cachedConfig.copy(
                     requestFineLocation = true
                 )
             )
         }
     }
 
-    fun loadWeather(context: Context) {
+    fun loadWeather(nx: Int, ny: Int) {
         viewModelScope.launch {
-            runCatching {
-                val address = getAddress(context) ?: return@launch
-                val parseResult = withContext(Dispatchers.IO) {
-                    XlsxParser.findXY(context, address)
-                }
+            //재시도 클릭 시 로딩상태로 바꿈
+            if (state.value.weatherUiState is WeatherUiState.Fail) {
+                _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
+            }
 
-                weatherRepository.getRealTimeWeather(parseResult.nx, parseResult.ny)
+            runCatching {
+                weatherRepository.getRealTimeWeather(nx, ny)
             }.onFailure {
                 _state.value = _state.value.copy(
                     weatherUiState = WeatherUiState.Fail(it.message ?: "날씨를 가져오는 데 실패하였습니다.")
