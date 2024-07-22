@@ -11,7 +11,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 28
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
+    implementation(project(":core:datastore"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -52,7 +53,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.aac.room)
-    implementation(libs.aac.room.ktx)
     ksp(libs.aac.roomCompiler)
 
     implementation(libs.moshi)
@@ -61,4 +61,6 @@ dependencies {
 
     implementation(libs.hilt)
     ksp(libs.hiltCompiler)
+
+    implementation(libs.androidx.datastore)
 }

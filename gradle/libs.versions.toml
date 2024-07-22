@@ -39,6 +39,14 @@ hilt = "2.51.1"
 #https://square.github.io/okhttp/changelogs/changelog/
 okhttp3 = "4.9.0"
 
+datastore = "1.1.1"
+
+#https://developers.google.com/android/guides/setup?hl=ko
+play-service-location = "21.3.0"
+
+#https://mvnrepository.com/artifact/org.apache.poi
+poi = "3.9"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,8 +68,12 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx"}
 android-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "android-navigation"}
 android-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "android-navigation"}
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
 retrofit2-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2"}
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
+google-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-service-location" }
+poi-common = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
+poi-oomxl = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
 
 
 aac-room = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -91,4 +103,9 @@ retrofit2 = [
     "retrofit2-core",
     "moshi-retrofit2-converter",
     "okhttp3-logging-interceptor"
+]
+
+poi = [
+    "poi-common",
+    "poi-oomxl"
 ]

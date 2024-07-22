@@ -15,5 +15,6 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
         <item name="bottomNavigationStyle">@style/MyBottomNavigationViewStyle</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:indeterminateTint">@color/black</item>
     </style>
 </resources>

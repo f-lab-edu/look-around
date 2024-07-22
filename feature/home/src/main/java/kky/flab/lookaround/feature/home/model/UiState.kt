@@ -1,9 +1,17 @@
 package kky.flab.lookaround.feature.home.model
 
-internal sealed interface UiState
+import kky.flab.lookaround.core.domain.model.Weather
 
-internal data object Loading: UiState
-
-internal data class Result(
-    val recording: Boolean
-): UiState
+data class UiState(
+    val recording: Boolean,
+    val weatherUiState: WeatherUiState,
+    val recordState: RecordUiState
+) {
+    companion object {
+        val EMPTY = UiState(
+            recording = false,
+            weatherUiState = WeatherUiState.Loading,
+            recordState = RecordUiState.Loading
+        )
+    }
+}

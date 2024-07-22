@@ -6,5 +6,5 @@ data class Record(
 //    val image: ByteArray?,
     val startTimeStamp: Long,
     val endTimeStamp: Long,
-    val path: List<Path>
+    val path: List<Path>,
 )

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "kky.flab.lookaround"
-        minSdk = 24
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

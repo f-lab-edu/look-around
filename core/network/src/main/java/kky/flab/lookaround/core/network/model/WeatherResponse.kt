@@ -42,12 +42,19 @@ data class WeatherItem(
         get() = try {
             fcstValue.toDouble()
         } catch (e: NumberFormatException) {
-            if (fcstValue == "1mm 미만") {
-                0.5
+            if (category == "RN1") {
+                getPrecipitationValue()
             } else {
                 0.0
             }
         } catch (e: Exception) {
             0.0
         }
+
+    private fun getPrecipitationValue(): Double = when(fcstValue) {
+        "1mm 미만" -> 0.5
+        else -> {
+            fcstValue.substringBefore("m").toDouble()
+        }
+    }
 }
