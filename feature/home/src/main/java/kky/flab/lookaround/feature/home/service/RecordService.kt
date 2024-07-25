@@ -19,12 +19,16 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.RecordRepository
+import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.feature.home.R
 import kky.flab.lookaround.feature.home.RecordingActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RecordService: Service() {
+class RecordService : Service() {
 
     @Inject
     lateinit var recordRepository: RecordRepository
@@ -33,9 +37,16 @@ class RecordService: Service() {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
-            if(result.locations.isNotEmpty()) {
-                result.locations.forEach {
-                    Log.d("RecordService", "${it?.toString()}")
+            if (result.locations.isNotEmpty()) {
+                result.locations.forEach { location ->
+                    location?.let {
+                        recordRepository.addPath(
+                            Path(
+                                latitude = it.latitude,
+                                longitude = it.longitude
+                            )
+                        )
+                    }
                 }
             }
         }
@@ -47,11 +58,14 @@ class RecordService: Service() {
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         startLocationUpdates()
         showNotification()
+
         return START_STICKY
     }
 
     override fun onDestroy() {
-        LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(locationCallback)
+        LocationServices
+            .getFusedLocationProviderClient(this)
+            .removeLocationUpdates(locationCallback)
         super.onDestroy()
     }
 
@@ -59,13 +73,20 @@ class RecordService: Service() {
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.Builder(3000)
             .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-            .setIntervalMillis(3000)
+            .setIntervalMillis(5000)
             .build()
 
-        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper()).addOnSuccessListener {
+        locationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        ).addOnSuccessListener {
             Log.d("RecordService", "트래킹 시작")
         }.addOnFailureListener {
             Log.e("RecordService", "트래킹 시도 실패 ${it.message}")
+            CoroutineScope(Dispatchers.IO).launch {
+                recordRepository.endRecording()
+            }
             stopSelf()
         }
     }
@@ -75,14 +96,18 @@ class RecordService: Service() {
 
         val channelId = getString(R.string.foreground_service_notification_channel_id)
 
-        val stopIntent = Intent(this, RecordingActivity::class.java)
-        val stopPendingIntent = PendingIntent.getActivity(this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val notificationClickIntent = Intent(this, RecordingActivity::class.java)
+
+        val stopIntent = Intent(this, RecordingActivity::class.java).apply {
+            putExtra("stop", true)
+        }
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("산책을 기록중입니다.")
             .setContentText("산책을 끝내고 싶다면 아래 '종료' 버튼을 눌러주세요.")
             .setSmallIcon(R.drawable.sunny)
-            .addAction(R.drawable.baseline_stop_24, "산책 종료", stopPendingIntent)
+            .setContentIntent(getPendingIntent(1, notificationClickIntent))
+            .addAction(R.drawable.baseline_stop_24, "산책 종료", getPendingIntent(2, stopIntent))
             .setOngoing(true)
             .build()
 
@@ -93,5 +118,14 @@ class RecordService: Service() {
         } else {
             startForeground(1, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
         }
+    }
+
+    private fun getPendingIntent(requestCode: Int, intent: Intent): PendingIntent {
+        return PendingIntent.getActivity(
+            this,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 }
