@@ -3,15 +3,17 @@ package kky.flab.lookaround
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import com.naver.maps.map.NaverMapSdk
 import dagger.hilt.android.HiltAndroidApp
 import kky.flab.lookaround.feature.home.R
 
 @HiltAndroidApp
-class GlobalApplication: Application() {
+class GlobalApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
         createFgsNotificationChannel()
+        initNaverMapSdk()
     }
 
     private fun createFgsNotificationChannel() {
@@ -28,5 +30,10 @@ class GlobalApplication: Application() {
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
+    }
+
+    private fun initNaverMapSdk() {
+        NaverMapSdk.getInstance(this).client =
+            NaverMapSdk.NaverCloudPlatformClient(BuildConfig.NAVER_API_KEY)
     }
 }

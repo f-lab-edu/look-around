@@ -1,9 +1,13 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hiltPlugin)
 }
+
+fun getApiKey(propertyKey: String): String = gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 
 android {
     namespace = "kky.flab.lookaround"
@@ -17,6 +21,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val naverApiKey = getApiKey("NAVER_API_KEY")
+        buildConfigField("String", "NAVER_API_KEY", naverApiKey)
     }
 
     buildTypes {
@@ -58,6 +65,8 @@ dependencies {
 
     implementation(libs.hilt)
     ksp(libs.hiltCompiler)
+
+    implementation(libs.naver.map)
 
 //    implementation(libs.androidx.material3)
 //    testImplementation(libs.junit)
