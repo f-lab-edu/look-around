@@ -1,12 +1,14 @@
 package kky.flab.lookaround.core.domain
 
-import kotlinx.coroutines.flow.Flow
+import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.core.domain.model.Record
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 interface RecordRepository {
 
     val recording: Flow<Boolean>
+
+    val recordingState: Flow<Record>
 
     fun getRecords(): Flow<List<Record>>
 
@@ -18,5 +20,7 @@ interface RecordRepository {
 
     fun startRecording()
 
-    fun endRecording()
+    suspend fun endRecording()
+
+    fun addPath(path: Path)
 }
