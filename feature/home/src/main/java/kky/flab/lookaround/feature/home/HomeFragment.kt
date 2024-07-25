@@ -118,11 +118,15 @@ class HomeFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        is Effect.ShowEndRecordingMessage,
-                        is Effect.ShowStartRecordingMessage,
-                        -> {
+                        is Effect.ShowEndRecordingMessage -> {
+                            requireContext().startActivity(
+                                Intent(requireContext(), RecordingActivity::class.java)
+                            )
+                        }
+
+                        is Effect.ShowStartRecordingMessage -> {
                             showRecordingDialog(it.message) { _, _ ->
-                                viewModel.toggleRecording()
+                                viewModel.startRecording()
                             }
                         }
 
@@ -133,6 +137,8 @@ class HomeFragment : Fragment() {
                                     RecordService::class.java
                                 )
                             )
+
+                            startActivity(Intent(requireContext(), RecordingActivity::class.java))
                         }
 
                         Effect.StopRecordingService -> {

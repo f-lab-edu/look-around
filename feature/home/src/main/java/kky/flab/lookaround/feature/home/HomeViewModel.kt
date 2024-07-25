@@ -3,8 +3,8 @@ package kky.flab.lookaround.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.ConfigRepository
+import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.WeatherRepository
 import kky.flab.lookaround.core.domain.model.Config
 import kky.flab.lookaround.feature.home.model.Effect
@@ -84,14 +84,8 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    fun toggleRecording() {
-        val recording = state.value.recording
-
-        if (recording) {
-            recordRepository.endRecording()
-        } else {
-            recordRepository.startRecording()
-        }
+    fun startRecording() {
+        recordRepository.startRecording()
     }
 
     fun updateRequestedFinLocation() {

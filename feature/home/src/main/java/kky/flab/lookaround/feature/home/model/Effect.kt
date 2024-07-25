@@ -7,7 +7,7 @@ internal sealed interface Effect {
     ): Effect
 
     data class ShowEndRecordingMessage(
-        override val message: String = "산책을 종료할까요?"
+        override val message: String = ""
     ): Effect
 
     data object StartRecordingService: Effect {
