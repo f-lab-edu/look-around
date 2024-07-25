@@ -5,10 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kky.flab.lookaround.core.data.RecordRepositoryImpl
-import kky.flab.lookaround.core.data.SettingRepositoryImpl
+import kky.flab.lookaround.core.data.ConfigRepositoryImpl
 import kky.flab.lookaround.core.data.WeatherRepositoryImpl
 import kky.flab.lookaround.core.domain.RecordRepository
-import kky.flab.lookaround.core.domain.SettingRepository
+import kky.flab.lookaround.core.domain.ConfigRepository
 import kky.flab.lookaround.core.domain.WeatherRepository
 import javax.inject.Singleton
 
@@ -31,6 +31,6 @@ internal interface RepositoryModule {
     @Singleton
     @Binds
     fun bindsConfigRepository(
-        configRepository: SettingRepositoryImpl
-    ): SettingRepository
+        configRepository: ConfigRepositoryImpl
+    ): ConfigRepository
 }

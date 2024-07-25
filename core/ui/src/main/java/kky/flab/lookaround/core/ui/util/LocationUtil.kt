@@ -8,6 +8,7 @@ import android.os.Build
 import com.google.android.gms.location.LocationServices
 import java.util.Locale
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @SuppressLint("MissingPermission")
@@ -23,6 +24,10 @@ suspend fun getAddress(context: Context): Address? = suspendCoroutine { continua
                     continuation.resume(address.first())
                 }
             }
-        }
+        } ?: continuation.resumeWithException(
+            IllegalStateException("주소를 가져올 수 없습니다.\n위치 서비스가 활성화 되있는 지 확인해주세요.")
+        )
+    }.addOnFailureListener { e ->
+        continuation.resumeWithException(Exception("주소를 가져오는 데 실패하였습니다.\n재시도 해주세요.",e))
     }
 }

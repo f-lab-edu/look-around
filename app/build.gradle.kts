@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "kky.flab.lookaround"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "kky.flab.lookaround"
-        minSdk = 28
-        targetSdk = 34
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

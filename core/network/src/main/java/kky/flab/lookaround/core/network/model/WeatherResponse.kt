@@ -53,6 +53,7 @@ data class WeatherItem(
 
     private fun getPrecipitationValue(): Double = when(fcstValue) {
         "1mm 미만" -> 0.5
+        "강수없음" -> 0.0
         else -> {
             fcstValue.substringBefore("m").toDouble()
         }

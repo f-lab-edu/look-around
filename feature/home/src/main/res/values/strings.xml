@@ -5,4 +5,7 @@
     <string name="status_on_sub_message">누르면 산책을 종료합니다.</string>
     <string name="status_off_sub_message">누르면 산책을 시작합니다.</string>
 
+    <string name="foreground_service_notification_channel_id">FgsNotificationChannelId</string>
+    <string name="foreground_service_notification_channel_name">산책 기록</string>
+
 </resources>

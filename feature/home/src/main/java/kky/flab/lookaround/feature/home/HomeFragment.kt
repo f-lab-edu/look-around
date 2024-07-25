@@ -1,13 +1,14 @@
 package kky.flab.lookaround.feature.home
 
 import android.Manifest
+import android.content.Context.LOCATION_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,19 +20,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.model.Weather
+import kky.flab.lookaround.core.ui.util.getAddress
+import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
 import kky.flab.lookaround.feature.home.databinding.FragmentHomeBinding
-import kky.flab.lookaround.feature.home.model.Error
-import kky.flab.lookaround.feature.home.model.ShowEndRecordingMessage
-import kky.flab.lookaround.feature.home.model.ShowStartRecordingMessage
+import kky.flab.lookaround.feature.home.model.Effect
 import kky.flab.lookaround.feature.home.model.WeatherUiState
+import kky.flab.lookaround.feature.home.service.RecordService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -41,11 +42,28 @@ class HomeFragment : Fragment() {
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-            viewModel.updateRequestedFinLocation()
-
+            if (result.containsKey(Manifest.permission.ACCESS_FINE_LOCATION)
+                || result.containsKey(Manifest.permission.ACCESS_COARSE_LOCATION)
+            ) {
+                if (isRequestedPermission.not()) {
+                    viewModel.updateRequestedFinLocation()
+                }
+            } else if (result.containsKey(Manifest.permission.POST_NOTIFICATIONS)) {
+                requireContext().startForegroundService(
+                    Intent(
+                        requireActivity(),
+                        RecordService::class.java
+                    )
+                )
+            }
         }
 
     private var isRequestedPermission: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkPermission()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,20 +82,19 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         binding.statusCard.setOnClickListener {
-            viewModel.showRecordingMessage()
+            startRecording()
         }
 
         binding.btWeatherRetry.setOnClickListener {
-            viewModel.loadWeather(requireContext())
+            loadWeather()
         }
     }
 
     private fun observe() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.setting.collect {
+                viewModel.config.collect {
                     isRequestedPermission = it.requestFineLocation
-                    checkPermission()
                 }
             }
         }
@@ -95,16 +112,36 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.effect.collect {
                     when (it) {
-                        is ShowEndRecordingMessage,
-                        is ShowStartRecordingMessage,
+                        is Effect.Error -> Toast.makeText(
+                            requireActivity(),
+                            it.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        is Effect.ShowEndRecordingMessage,
+                        is Effect.ShowStartRecordingMessage,
                         -> {
                             showRecordingDialog(it.message) { _, _ ->
                                 viewModel.toggleRecording()
                             }
                         }
 
-                        is Error -> {
-                            Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
+                        Effect.StartRecordingService -> {
+                            requireContext().startForegroundService(
+                                Intent(
+                                    requireActivity(),
+                                    RecordService::class.java
+                                )
+                            )
+                        }
+
+                        Effect.StopRecordingService -> {
+                            requireContext().stopService(
+                                Intent(
+                                    requireActivity(),
+                                    RecordService::class.java
+                                )
+                            )
                         }
                     }
                 }
@@ -167,13 +204,14 @@ class HomeFragment : Fragment() {
 
     private fun showPermissionRationaleDialog(onPositiveButtonListener: (DialogInterface, Int) -> Unit) {
         val dialog = AlertDialog.Builder(requireActivity()).apply {
-            setMessage("현재 날씨 정보를 가져오기 위해서 위치 권한이 필요합니다.")
+            setMessage("서비스를 이용하기 위해 자세한 위치 권한을 허용해주세요.")
             setPositiveButton("확인", onPositiveButtonListener)
             setCancelable(false)
         }
 
         dialog.show()
     }
+
 
     private fun checkPermission() {
         val permissions = arrayOf(
@@ -204,7 +242,7 @@ class HomeFragment : Fragment() {
             }
 
             if (granted) {
-                viewModel.loadWeather(requireContext())
+                loadWeather()
             } else {
                 showPermissionRationaleDialog { _, _ ->
                     if (isRequestedPermission) {
@@ -223,5 +261,51 @@ class HomeFragment : Fragment() {
 
     private fun requestPermission(permissions: Array<String>) {
         permissionLauncher.launch(permissions)
+    }
+
+    private fun startRecording() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            showPermissionRationaleDialog { _, _ ->
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:${requireContext().packageName}")
+                )
+                startActivity(intent)
+            }
+            return
+        }
+
+        val locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER).not()) {
+            val dialog = AlertDialog.Builder(requireContext()).apply {
+                setMessage("서비스를 이용하기 위해 GPS를 켜주세요.")
+                setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                setCancelable(false)
+            }
+
+            dialog.show()
+            return
+        }
+
+        viewModel.showRecordingMessage()
+    }
+
+    private fun loadWeather() {
+        lifecycleScope.launch {
+            val context = requireContext()
+            val address = getAddress(context) ?: return@launch
+            val parseResult = withContext(Dispatchers.IO) {
+                XlsxParser.findXY(context, address)
+            }
+
+            viewModel.loadWeather(parseResult.nx, parseResult.ny)
+        }
     }
 }

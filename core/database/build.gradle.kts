@@ -6,10 +6,10 @@ plugins {
 
 android {
     namespace = "kky.flab.lookaround.core.database"
-    compileSdk = 34
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 28
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.aac.room)
+    implementation(libs.aac.room.ktx)
     ksp(libs.aac.roomCompiler)
 
     implementation(libs.moshi)
