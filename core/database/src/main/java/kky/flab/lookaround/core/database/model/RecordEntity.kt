@@ -12,5 +12,6 @@ data class RecordEntity(
 //    val image: Bitmap?,
     val startTimeStamp: Long,
     val endTimeStamp: Long,
+    val distance: Long,
     val path: List<PathEntity>
 )
