@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
                         }
 
                         is Effect.ShowStartRecordingMessage -> {
-                            showRecordingDialog(it.message) { _, _ ->
+                            showRecordingDialog("산책을 시작해볼까요?") { _, _ ->
                                 viewModel.startRecording()
                             }
                         }
@@ -157,8 +157,7 @@ class HomeFragment : Fragment() {
 
     private fun handleRecordingState(state: Boolean) {
         val message = if (state) R.string.status_on_message else R.string.status_off_message
-        val subMessage =
-            if (state) R.string.status_on_sub_message else R.string.status_off_sub_message
+        val subMessage = if (state) R.string.status_on_sub_message else R.string.status_off_sub_message
 
         binding.tvMessage.setText(message)
         binding.tvSubMessage.setText(subMessage)

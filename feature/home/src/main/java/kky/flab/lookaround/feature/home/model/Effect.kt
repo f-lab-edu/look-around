@@ -1,26 +1,15 @@
 package kky.flab.lookaround.feature.home.model
 
 internal sealed interface Effect {
-    val message: String
-    data class ShowStartRecordingMessage(
-        override val message: String = "산책을 시작해볼까요?"
-    ): Effect
+    data object ShowStartRecordingMessage: Effect
 
-    data class ShowEndRecordingMessage(
-        override val message: String = ""
-    ): Effect
+    data object ShowEndRecordingMessage: Effect
 
-    data object StartRecordingService: Effect {
-        override val message: String
-            get() = ""
-    }
+    data object StartRecordingService: Effect
 
-    data object StopRecordingService: Effect {
-        override val message: String
-            get() = ""
-    }
+    data object StopRecordingService: Effect
 
     data class Error(
-        override val message: String
+        val message: String
     ): Effect
 }
