@@ -8,14 +8,13 @@
         <activity
             android:name=".RecordingActivity"
             android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-
         <service
             android:name=".service.RecordService"
             android:exported="false"
             android:foregroundServiceType="location" />
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${naverApiKey}" />
     </application>
 
 </manifest>
