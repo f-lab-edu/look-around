@@ -69,13 +69,13 @@ internal class RecordRepositoryImpl @Inject constructor(
     }
 
     private fun updateState(path: Path, distance: Long) {
-        _recordingState.update {
-            it.copy(
-                path = it
+        _recordingState.update { record ->
+            record.copy(
+                path = record
                     .path
                     .toMutableList()
                     .apply { add(path) },
-                distance = it.distance + distance
+                distance = record.distance + distance
             )
         }
     }

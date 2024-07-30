@@ -37,7 +37,7 @@ class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityRecordingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mapViewFm = supportFragmentManager.findFragmentById(R.id.map_view) as MapFragment?
+        val mapViewFm = supportFragmentManager.findFragmentById(R.id.map_view) as? MapFragment
             ?: MapFragment.newInstance(NaverMapOptions().zoomControlEnabled(false)).also {
                 supportFragmentManager.beginTransaction().add(R.id.map_view, it).commitNow()
             }
@@ -62,7 +62,7 @@ class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect { record ->
                     if (record.path.size >= 2) {
-                        pathOverlay.coords = record.path.map { LatLng(it.latitude, it.longitude) }
+                        pathOverlay.coords = record.path
                         initPathOverlay()
                     }
 
