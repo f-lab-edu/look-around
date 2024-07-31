@@ -12,6 +12,8 @@ interface RecordRepository {
 
     fun getRecords(): Flow<List<Record>>
 
+    suspend fun getRecord(id: Long): Record
+
     suspend fun saveRecord(record: Record): Long
 
     suspend fun updateRecord(record: Record)
@@ -20,7 +22,7 @@ interface RecordRepository {
 
     fun startRecording()
 
-    suspend fun endRecording()
+    suspend fun endRecording(): Long
 
     fun addPath(path: Path)
 }

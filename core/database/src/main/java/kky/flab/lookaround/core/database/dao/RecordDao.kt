@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecordDao {
     @Query("SELECT * FROM record ORDER BY id DESC")
-    fun getRecord(): Flow<List<RecordEntity>>
+    fun getRecords(): Flow<List<RecordEntity>>
+
+    @Query("SELECT * FROM record WHERE :id = id")
+    fun getRecord(id: Long): RecordEntity
 
     @Insert
     suspend fun insertRecord(record: RecordEntity): Long
