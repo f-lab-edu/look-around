@@ -30,6 +30,7 @@ import kky.flab.lookaround.feature.home.databinding.FragmentHomeBinding
 import kky.flab.lookaround.feature.home.model.Effect
 import kky.flab.lookaround.feature.home.model.WeatherUiState
 import kky.flab.lookaround.feature.home.service.RecordService
+import kky.flab.lookaround.feature.recording.RecordingActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

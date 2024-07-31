@@ -1,4 +1,4 @@
-package kky.flab.lookaround.feature.home
+package kky.flab.lookaround.feature.recording
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -18,7 +18,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
-import kky.flab.lookaround.feature.home.databinding.ActivityRecordingBinding
+import kky.flab.lookaround.feature.recording.databinding.ActivityRecordingBinding
 import kotlinx.coroutines.launch
 import kky.flab.lookaround.core.ui.R as CoreUiResource
 

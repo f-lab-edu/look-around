@@ -1,4 +1,4 @@
-package kky.flab.lookaround.feature.home
+package kky.flab.lookaround.feature.recording
 
 import android.content.Context
 import android.util.AttributeSet
