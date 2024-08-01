@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
                 if (isRequestedPermission.not()) {
                     viewModel.updateRequestedFinLocation()
                 }
+                loadWeather()
             } else if (result.containsKey(Manifest.permission.POST_NOTIFICATIONS)) {
                 requireContext().startForegroundService(
                     Intent(
