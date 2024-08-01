@@ -2,10 +2,8 @@ package kky.flab.lookaround.feature.recording
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -26,7 +24,6 @@ class MapBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout.Beh
                 BottomSheetBehavior.from(dependency)
                 onDependentViewChanged(parent, child, dependency)
             } catch (e: IllegalArgumentException) {
-                Log.e("MovedownBehavior", e.message ?: "Invalid dependency view")
                 continue
             }
         }
