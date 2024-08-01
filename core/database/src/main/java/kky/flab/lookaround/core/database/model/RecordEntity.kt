@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 data class RecordEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val memo: String?,
+    val memo: String,
     val emoji: String?,
-//    val image: Bitmap?,
+    val imageUri: String,
     val startTimeStamp: Long,
     val endTimeStamp: Long,
     val distance: Long,
