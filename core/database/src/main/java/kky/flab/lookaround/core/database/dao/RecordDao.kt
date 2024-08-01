@@ -14,7 +14,7 @@ interface RecordDao {
     fun getRecords(): Flow<List<RecordEntity>>
 
     @Query("SELECT * FROM record WHERE :id = id")
-    fun getRecord(id: Long): RecordEntity
+    suspend fun getRecord(id: Long): RecordEntity
 
     @Insert
     suspend fun insertRecord(record: RecordEntity): Long
