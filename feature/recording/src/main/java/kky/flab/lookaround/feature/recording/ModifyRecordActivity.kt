@@ -103,7 +103,8 @@ class ModifyRecordActivity : AppCompatActivity() {
                             binding.etMemo.setText(uiState.record.memo)
                             val uri = uiState.record.imageUri
                             if (uri.isNotEmpty()) {
-                                val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, Uri.parse(uri)))
+                                photoUri = Uri.parse(uri)
+                                val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, photoUri!!))
                                 binding.ivPhoto.setImageBitmap(bitmap)
                             }
                         }
