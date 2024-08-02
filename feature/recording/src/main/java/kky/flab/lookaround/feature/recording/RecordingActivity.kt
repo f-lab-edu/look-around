@@ -1,6 +1,7 @@
 package kky.flab.lookaround.feature.recording
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -19,6 +20,7 @@ import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
 import kky.flab.lookaround.feature.recording.databinding.ActivityRecordingBinding
+import kky.flab.lookaround.feature.recording.model.RecordingEffect
 import kotlinx.coroutines.launch
 import kky.flab.lookaround.core.ui.R as CoreUiResource
 
@@ -79,13 +81,28 @@ class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.effect.collect {
+                    when(it) {
+                        is RecordingEffect.SavedRecording -> {
+                            startActivity(
+                                Intent(this@RecordingActivity, ModifyRecordActivity::class.java)
+                                    .putExtra(ModifyRecordActivity.EXTRA_RECORD_ID, it.id)
+                            )
+                            finish()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun showCompleteDialog() {
         AlertDialog.Builder(this).setMessage("산책을 종료할까요?").setPositiveButton("종료") { dialog, _ ->
             dialog.dismiss()
             viewModel.complete()
-            finish()
         }.setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }.show()
     }
 
