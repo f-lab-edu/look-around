@@ -57,7 +57,7 @@ internal class RecordRepositoryImpl @Inject constructor(
 
     override suspend fun endRecording(): Long {
         _recording.value = false
-        val record = _recordingState.value
+        val record = _recordingState.value.copy(endTimeStamp = System.currentTimeMillis())
         _recordingState.value = Record.EMPTY
         val id = saveRecord(record)
         return id
