@@ -72,9 +72,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return FragmentHomeBinding.inflate(inflater, container, false).also {
-            binding = it
-        }.root
+        return FragmentHomeBinding.inflate(inflater, container, false).also { binding = it }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
