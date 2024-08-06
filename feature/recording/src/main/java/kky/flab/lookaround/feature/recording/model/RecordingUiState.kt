@@ -1,14 +1,13 @@
-package kky.flab.lookaround.feature.home.model
+package kky.flab.lookaround.feature.recording.model
 
 import com.naver.maps.geometry.LatLng
-import kky.flab.lookaround.core.domain.model.Path
 
-data class RecordingState(
+data class RecordingUiState(
     val path: List<LatLng>,
     val distance: Long,
 ) {
     companion object {
-        val EMPTY = RecordingState(
+        val EMPTY = RecordingUiState(
             path = emptyList(),
             distance = 0,
         )

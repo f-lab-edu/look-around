@@ -78,9 +78,9 @@ internal class HomeViewModel @Inject constructor(
         val recording = state.value.recording
 
         if (recording) {
-            _effect.tryEmit(Effect.ShowEndRecordingMessage())
+            _effect.tryEmit(Effect.ShowEndRecordingMessage)
         } else {
-            _effect.tryEmit(Effect.ShowStartRecordingMessage())
+            _effect.tryEmit(Effect.ShowStartRecordingMessage)
         }
     }
 

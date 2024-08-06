@@ -10,8 +10,9 @@ fun RecordEntity.toDomain(): Record = Record(
     startTimeStamp = startTimeStamp,
     endTimeStamp = endTimeStamp,
     memo = memo,
+    imageUri = imageUri,
     distance = distance,
-    path = path.map { Path(it.latitude, it.longitude) }
+    path = path.map { Path(it.latitude, it.longitude) },
 )
 
 fun Record.toData(): RecordEntity = RecordEntity(
@@ -19,8 +20,8 @@ fun Record.toData(): RecordEntity = RecordEntity(
     startTimeStamp = startTimeStamp,
     endTimeStamp = endTimeStamp,
     memo = memo,
+    imageUri = imageUri,
     path = path.map { PathEntity(it.latitude, it.longitude) },
     distance = distance,
     emoji = null,
-//        image = null,
 )

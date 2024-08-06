@@ -5,9 +5,6 @@
         android:allowBackup="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lookaround">
-        <activity
-            android:name=".RecordingActivity"
-            android:exported="false" />
         <service
             android:name=".service.RecordService"
             android:exported="false"

@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,22 +5,15 @@ plugins {
     alias(libs.plugins.hiltPlugin)
 }
 
-fun getApiKey(propertyKey: String): String = gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
-
 android {
-    namespace = "kky.flab.lookaround.feature.home"
+    namespace = "kky.flab.lookaround.feature.recording"
     compileSdk = libs.versions.compileSdk.get().toInt()
-
-    val naverApiKey = getApiKey("NAVER_API_KEY")
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "NAVER_API_KEY", naverApiKey)
-        manifestPlaceholders["naverApiKey"] = naverApiKey
     }
 
     buildTypes {
@@ -41,7 +32,6 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
     viewBinding {
         enable = true
     }
@@ -50,7 +40,6 @@ android {
 dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:domain"))
-    implementation(project(":feature:recording"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -66,4 +55,7 @@ dependencies {
     ksp(libs.hiltCompiler)
 
     implementation(libs.google.location)
+
+    implementation(libs.naver.map)
+
 }
