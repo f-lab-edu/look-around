@@ -40,6 +40,7 @@ class ModifyRecordActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
             it?.let { uri ->
                 photoUri = uri
+                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 val bitmap =
                     ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
                 binding.ivPhoto.setImageBitmap(bitmap)
