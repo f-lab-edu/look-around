@@ -46,8 +46,18 @@ class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapViewFm.getMapAsync(this)
 
+        checkStopFlag(intent)
+
         initView()
         observe()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        checkStopFlag(intent)
+    }
+
+    private fun checkStopFlag(intent: Intent) {
         if (intent.getBooleanExtra("stop", false)) {
             showCompleteDialog()
         }

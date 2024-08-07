@@ -7,8 +7,6 @@ internal sealed interface Effect {
 
     data object StartRecordingService: Effect
 
-    data object StopRecordingService: Effect
-
     data class Error(
         val message: String
     ): Effect

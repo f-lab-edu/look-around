@@ -72,9 +72,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return FragmentHomeBinding.inflate(inflater, container, false).also {
-            binding = it
-        }.root
+        return FragmentHomeBinding.inflate(inflater, container, false).also { binding = it }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,15 +139,6 @@ class HomeFragment : Fragment() {
                             )
 
                             startActivity(Intent(requireContext(), RecordingActivity::class.java))
-                        }
-
-                        Effect.StopRecordingService -> {
-                            requireContext().stopService(
-                                Intent(
-                                    requireActivity(),
-                                    RecordService::class.java
-                                )
-                            )
                         }
                     }
                 }

@@ -66,8 +66,6 @@ internal class HomeViewModel @Inject constructor(
         recordRepository.recording.onEach { recording ->
             if (recording) {
                 _effect.tryEmit(Effect.StartRecordingService)
-            } else {
-                _effect.tryEmit(Effect.StopRecordingService)
             }
 
             _state.update { it.copy(recording = recording) }

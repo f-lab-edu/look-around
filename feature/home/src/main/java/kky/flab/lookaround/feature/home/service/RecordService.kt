@@ -3,14 +3,14 @@ package kky.flab.lookaround.feature.home.service
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RecordService : Service() {
+class RecordService : LifecycleService() {
 
     @Inject
     lateinit var recordRepository: RecordRepository
@@ -52,9 +52,17 @@ class RecordService : Service() {
         }
     }
 
-    override fun onBind(intent: Intent?): IBinder? = null
-
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
+        lifecycleScope.launch {
+            recordRepository.recording.collect { recording ->
+                if (recording.not()) {
+                    stopSelf()
+                }
+            }
+        }
+
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         startLocationUpdates()
         showNotification()
@@ -63,9 +71,7 @@ class RecordService : Service() {
     }
 
     override fun onDestroy() {
-        LocationServices
-            .getFusedLocationProviderClient(this)
-            .removeLocationUpdates(locationCallback)
+        locationProviderClient.removeLocationUpdates(locationCallback)
         super.onDestroy()
     }
 
@@ -96,10 +102,14 @@ class RecordService : Service() {
 
         val channelId = getString(R.string.foreground_service_notification_channel_id)
 
-        val notificationClickIntent = Intent(this, RecordingActivity::class.java)
+        val notificationClickIntent = Intent(
+            this,
+            RecordingActivity::class.java
+        ).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
 
         val stopIntent = Intent(this, RecordingActivity::class.java).apply {
             putExtra("stop", true)
+            setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
