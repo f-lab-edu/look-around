@@ -140,15 +140,6 @@ class HomeFragment : Fragment() {
 
                             startActivity(Intent(requireContext(), RecordingActivity::class.java))
                         }
-
-                        Effect.StopRecordingService -> {
-                            requireContext().stopService(
-                                Intent(
-                                    requireActivity(),
-                                    RecordService::class.java
-                                )
-                            )
-                        }
                     }
                 }
             }
