@@ -102,10 +102,14 @@ class RecordService : LifecycleService() {
 
         val channelId = getString(R.string.foreground_service_notification_channel_id)
 
-        val notificationClickIntent = Intent(this, RecordingActivity::class.java)
+        val notificationClickIntent = Intent(
+            this,
+            RecordingActivity::class.java
+        ).setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
 
         val stopIntent = Intent(this, RecordingActivity::class.java).apply {
             putExtra("stop", true)
+            setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
