@@ -28,8 +28,8 @@
 * Coroutine + Flow
 * Room
 * Retrofit2
-* Gson
+* Moshi
 * AAC ViewModel
 * Hilt
-* Glide
+* NaverMap
 * ViewBinding
