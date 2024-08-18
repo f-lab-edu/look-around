@@ -37,7 +37,6 @@ class SettingFragment : Fragment() {
     private fun observe() {
         lifecycleScope.launch {
             viewModel.configState.collect {
-                Log.d("SettingFragment", it.toString())
                 binding.swTheme.isChecked = it.darkTheme
             }
         }
