@@ -15,19 +15,28 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class RecordListAdapter :
-    ListAdapter<Record, RecordListAdapter.RecordViewHolder>(RecordDiffUtil()) {
+class RecordListAdapter(
+    private val listener: ButtonListener
+) : ListAdapter<Record, RecordListAdapter.RecordViewHolder>(RecordDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordViewHolder {
-        val binding = ItemRecordBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return RecordViewHolder(binding)
+        val binding = ItemRecordBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        )
+
+        return RecordViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: RecordViewHolder, position: Int) {
         holder.onBind(getItem(position))
     }
 
-    class RecordViewHolder(val binding: ItemRecordBinding) : ViewHolder(binding.root) {
+    class RecordViewHolder(
+        private val binding: ItemRecordBinding,
+        private val listener: ButtonListener,
+    ) : ViewHolder(binding.root) {
         fun onBind(item: Record) {
             val date = Date(item.startTimeStamp)
             val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
@@ -47,6 +56,14 @@ class RecordListAdapter :
                 )
                 binding.ivPhoto.setImageBitmap(bitmap)
             }
+
+            binding.ivModify.setOnClickListener {
+                listener.onModify(item)
+            }
+
+            binding.ivDelete.setOnClickListener {
+                listener.onDelete(item)
+            }
         }
     }
 
@@ -58,5 +75,11 @@ class RecordListAdapter :
         override fun areContentsTheSame(oldItem: Record, newItem: Record): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface ButtonListener {
+        fun onModify(record: Record)
+
+        fun onDelete(record: Record)
     }
 }
