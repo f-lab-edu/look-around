@@ -3,8 +3,7 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Lookaround">
+        android:supportsRtl="true">
         <service
             android:name=".service.RecordService"
             android:exported="false"
