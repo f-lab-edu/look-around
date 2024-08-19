@@ -68,7 +68,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:hint="산책하면서 느낀 기분을 메모해보세요."
-        android:textColor="@color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="14dp"
         android:gravity="start"
         app:layout_constraintTop_toBottomOf="@id/ll_add_photo"
