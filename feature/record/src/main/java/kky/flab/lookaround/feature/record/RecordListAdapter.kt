@@ -1,6 +1,5 @@
 package kky.flab.lookaround.feature.record
 
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kky.flab.lookaround.core.domain.model.Record
+import kky.flab.lookaround.core.ui.util.ImageLoader.loadUri
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
 import kky.flab.lookaround.feature.record.databinding.ItemRecordBinding
 import java.text.SimpleDateFormat
@@ -48,13 +48,8 @@ class RecordListAdapter(
             val hasImage = item.imageUri.isNotEmpty()
             binding.ivPhoto.isVisible = hasImage
             if (hasImage) {
-                val bitmap = ImageDecoder.decodeBitmap(
-                    ImageDecoder.createSource(
-                        binding.root.context.contentResolver,
-                        Uri.parse(item.imageUri)
-                    )
-                )
-                binding.ivPhoto.setImageBitmap(bitmap)
+                val uri = Uri.parse(item.imageUri)
+                binding.ivPhoto.loadUri(uri)
             }
 
             binding.ivModify.setOnClickListener {
