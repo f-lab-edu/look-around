@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ModifyRecordActivity">
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:title="기록하기"
+        app:title="기록하기"
+        app:titleTextColor="?android:attr/textColorPrimary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -32,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="사진을 추가해보세요."
-            android:textColor="@color/black"
+            android:textColor="?android:attr/textColorPrimary"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
     <androidx.cardview.widget.CardView

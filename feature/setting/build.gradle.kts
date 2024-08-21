@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hiltPlugin)
 }
 
 android {
@@ -30,14 +32,23 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
+    implementation(project(":core:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.fragment.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.hilt)
+    ksp(libs.hiltCompiler)
 }

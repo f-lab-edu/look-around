@@ -18,11 +18,11 @@ import com.naver.maps.map.NaverMapOptions
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.PathOverlay
 import dagger.hilt.android.AndroidEntryPoint
+import kky.flab.lookaround.core.ui.util.getThemeColor
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
 import kky.flab.lookaround.feature.recording.databinding.ActivityRecordingBinding
 import kky.flab.lookaround.feature.recording.model.RecordingEffect
 import kotlinx.coroutines.launch
-import kky.flab.lookaround.core.ui.R as CoreUiResource
 
 @AndroidEntryPoint
 class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -120,8 +120,8 @@ class RecordingActivity : AppCompatActivity(), OnMapReadyCallback {
         if (pathOverlay.map == null && pathOverlay.coords.size >= 2 && this::map.isInitialized) {
             pathOverlay.map = map
             pathOverlay.width = 30
-            pathOverlay.passedColor = getColor(CoreUiResource.color.primaryColor)
-            pathOverlay.color = getColor(CoreUiResource.color.primaryColor)
+            pathOverlay.passedColor = getThemeColor(androidx.appcompat.R.attr.colorPrimary)
+            pathOverlay.color = getThemeColor(androidx.appcompat.R.attr.colorPrimary)
         }
     }
 
