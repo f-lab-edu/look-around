@@ -3,37 +3,42 @@ package kky.flab.lookaround.feature.record.model
 import android.net.Uri
 import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.core.domain.model.Record
+import kky.flab.lookaround.core.ui.util.millsToTimeFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
+
+val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN)
 
 data class RecordUiModel(
     val id: Long,
     val memo: String,
-    private val imageUri: String,
-    val startTimeStamp: Long,
-    val endTimeStamp: Long,
+    val imageUri: Uri?,
+    val date: String,
+    val runTime: String,
+    private val startTimeStamp: Long,
+    private val endTimeStamp: Long,
     val path: List<Path>,
-    val distance: Long
+    val distance: String,
 ) {
-    val ensureUri: Uri = Uri.parse(imageUri)
-
-    val hasImage: Boolean = imageUri.isNotEmpty()
-
-    fun toDomainModel(): Record = Record(
+    fun toDomain(): Record = Record(
         id = id,
-        memo = memo,
-        imageUri = imageUri,
+        memo =  memo,
+        imageUri = imageUri?.toString() ?: "",
         startTimeStamp = startTimeStamp,
         endTimeStamp = endTimeStamp,
         path = path,
-        distance = distance
+        distance = distance.removeSuffix("m").toLong(),
     )
 }
 
 fun Record.toUiModel(): RecordUiModel = RecordUiModel(
     id = id,
-    memo = memo,
-    imageUri = imageUri,
+    memo =  memo,
+    imageUri = if (imageUri.isNotEmpty()) Uri.parse(imageUri) else null,
+    date = dateFormat.format(startTimeStamp),
+    runTime = (endTimeStamp - startTimeStamp).millsToTimeFormat(),
     startTimeStamp = startTimeStamp,
     endTimeStamp = endTimeStamp,
     path = path,
-    distance = distance
+    distance = "${distance}m",
 )

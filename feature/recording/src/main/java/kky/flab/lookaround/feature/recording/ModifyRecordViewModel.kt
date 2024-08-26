@@ -27,7 +27,8 @@ class ModifyRecordViewModel @Inject constructor(
     configRepository: ConfigRepository
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<ModifyRecordUiState> = MutableStateFlow(ModifyRecordUiState.Result(Record.EMPTY))
+    private val _state: MutableStateFlow<ModifyRecordUiState> =
+        MutableStateFlow(ModifyRecordUiState.Result(Record.EMPTY))
     val state: StateFlow<ModifyRecordUiState> = _state.asStateFlow()
 
     private val _effect: MutableSharedFlow<ModifyRecordEffect> = MutableSharedFlow(
@@ -53,7 +54,7 @@ class ModifyRecordViewModel @Inject constructor(
         val state = _state.value as ModifyRecordUiState.Result
         val update = state.record.copy(
             memo = memo,
-            imageUri = uri?.toString() ?: state.record.imageUri
+            imageUri = uri?.toString() ?: ""
         )
 
         viewModelScope.launch {

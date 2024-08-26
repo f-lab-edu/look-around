@@ -22,8 +22,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.naver.maps.map.style.sources.ImageSource
 import dagger.hilt.android.AndroidEntryPoint
+import kky.flab.lookaround.core.ui.util.ImageLoader.loadUri
 import kky.flab.lookaround.feature.recording.databinding.ActivityModifyRecordBinding
 import kky.flab.lookaround.feature.recording.model.ModifyRecordEffect
 import kky.flab.lookaround.feature.recording.model.ModifyRecordUiState
@@ -41,9 +41,7 @@ class ModifyRecordActivity : AppCompatActivity() {
             it?.let { uri ->
                 photoUri = uri
                 contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                val bitmap =
-                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
-                binding.ivPhoto.setImageBitmap(bitmap)
+                binding.ivPhoto.loadUri(uri)
                 binding.cardImage.isVisible = true
             }
         }
@@ -107,6 +105,7 @@ class ModifyRecordActivity : AppCompatActivity() {
                                 photoUri = Uri.parse(uri)
                                 val bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, photoUri!!))
                                 binding.ivPhoto.setImageBitmap(bitmap)
+                                binding.cardImage.isVisible = true
                             }
                         }
                     }
@@ -154,6 +153,7 @@ class ModifyRecordActivity : AppCompatActivity() {
         binding.ivDelete.setOnClickListener {
             binding.ivPhoto.setImageBitmap(null)
             binding.cardImage.isVisible = false
+            photoUri = null
         }
     }
 
