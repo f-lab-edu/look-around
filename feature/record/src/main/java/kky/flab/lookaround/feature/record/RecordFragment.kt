@@ -45,7 +45,7 @@ class RecordFragment : Fragment(), RecordListAdapter.ButtonListener {
     }
 
     private fun observe() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect {
                     when (it) {
