@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.model.Record
 import kky.flab.lookaround.feature.record.databinding.FragmentRecordBinding
+import kky.flab.lookaround.feature.record.model.RecordUiModel
 import kky.flab.lookaround.feature.record.model.RecordUiState
 import kky.flab.lookaround.feature.recording.ModifyRecordActivity
 import kotlinx.coroutines.launch
@@ -65,7 +66,7 @@ class RecordFragment : Fragment(), RecordListAdapter.ButtonListener {
         }
     }
 
-    override fun onModify(record: Record) {
+    override fun onModify(record: RecordUiModel) {
         startActivity(
             Intent(
                 requireContext(),
@@ -74,7 +75,7 @@ class RecordFragment : Fragment(), RecordListAdapter.ButtonListener {
         )
     }
 
-    override fun onDelete(record: Record) {
+    override fun onDelete(record: RecordUiModel) {
         AlertDialog.Builder(requireContext())
             .setMessage("기록을 삭제 하시겠습니까?")
             .setPositiveButton("삭제") { dialog, _ ->

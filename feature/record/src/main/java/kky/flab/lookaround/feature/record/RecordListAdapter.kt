@@ -1,23 +1,18 @@
 package kky.flab.lookaround.feature.record
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import kky.flab.lookaround.core.domain.model.Record
 import kky.flab.lookaround.core.ui.util.ImageLoader.loadUri
-import kky.flab.lookaround.core.ui.util.millsToTimeFormat
 import kky.flab.lookaround.feature.record.databinding.ItemRecordBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import kky.flab.lookaround.feature.record.model.RecordUiModel
 
 class RecordListAdapter(
     private val listener: ButtonListener
-) : ListAdapter<Record, RecordListAdapter.RecordViewHolder>(RecordDiffUtil()) {
+) : ListAdapter<RecordUiModel, RecordListAdapter.RecordViewHolder>(RecordDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordViewHolder {
         val binding = ItemRecordBinding.inflate(
@@ -37,44 +32,43 @@ class RecordListAdapter(
         private val binding: ItemRecordBinding,
         private val listener: ButtonListener,
     ) : ViewHolder(binding.root) {
-        fun onBind(item: Record) {
-            val date = Date(item.startTimeStamp)
-            val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
-            binding.tvDate.text = sdf.format(date)
-            binding.tvTime.text = (item.endTimeStamp - item.startTimeStamp).millsToTimeFormat()
-            binding.tvDistance.text = "${item.distance}m"
-            binding.tvMemo.text = item.memo
+        fun onBind(item: RecordUiModel) = with(binding) {
+            tvDate.text = item.date
+            tvTime.text = item.runTime
+            tvDistance.text = item.distance
+            tvMemo.text = item.memo
 
-            val hasImage = item.imageUri.isNotEmpty()
-            binding.ivPhoto.isVisible = hasImage
-            if (hasImage) {
-                val uri = Uri.parse(item.imageUri)
-                binding.ivPhoto.loadUri(uri)
+            val hasImage = item.imageUri != null
+            ivPhoto.isVisible = hasImage
+
+            if (item.imageUri != null) {
+                ivPhoto.loadUri(item.imageUri)
             }
 
-            binding.ivModify.setOnClickListener {
+            ivModify.setOnClickListener {
                 listener.onModify(item)
             }
 
-            binding.ivDelete.setOnClickListener {
+            ivDelete.setOnClickListener {
                 listener.onDelete(item)
             }
         }
+
     }
 
-    private class RecordDiffUtil : DiffUtil.ItemCallback<Record>() {
-        override fun areItemsTheSame(oldItem: Record, newItem: Record): Boolean {
+    private class RecordDiffUtil : DiffUtil.ItemCallback<RecordUiModel>() {
+        override fun areItemsTheSame(oldItem: RecordUiModel, newItem: RecordUiModel): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Record, newItem: Record): Boolean {
+        override fun areContentsTheSame(oldItem: RecordUiModel, newItem: RecordUiModel): Boolean {
             return oldItem == newItem
         }
     }
 
     interface ButtonListener {
-        fun onModify(record: Record)
+        fun onModify(record: RecordUiModel)
 
-        fun onDelete(record: Record)
+        fun onDelete(record: RecordUiModel)
     }
 }
