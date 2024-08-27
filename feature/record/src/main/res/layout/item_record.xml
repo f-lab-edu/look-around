@@ -19,6 +19,25 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/outline_delete"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="7dp"
+            android:padding="3dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_photo"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <ImageView
+            android:id="@+id/iv_modify"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/outline_edit"
+            android:layout_marginEnd="8dp"
+            android:padding="3dp"
+            app:layout_constraintTop_toTopOf="@id/iv_delete"
+            app:layout_constraintEnd_toStartOf="@id/iv_delete"/>
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.Lookaround.Theme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Lookaround" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/purple</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/purple</item>

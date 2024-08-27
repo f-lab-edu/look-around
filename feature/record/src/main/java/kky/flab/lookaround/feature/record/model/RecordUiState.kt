@@ -6,6 +6,6 @@ sealed interface RecordUiState {
     data object Loading: RecordUiState
 
     data class Result(
-        val records: List<Record>
+        val records: List<RecordUiModel>
     ): RecordUiState
 }

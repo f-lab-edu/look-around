@@ -9,3 +9,7 @@ android {
         enable = true
     }
 }
+
+dependencies {
+    implementation(projects.feature.recording)
+}
