@@ -1,4 +1,3 @@
-import com.lookaround.app.configureHiltAndroid
 import com.lookaround.app.libs
 
 plugins {
