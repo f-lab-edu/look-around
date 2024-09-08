@@ -6,11 +6,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kky.flab.lookaround.core.domain.ConfigRepository
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.WeatherRepository
+import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Config
 import kky.flab.lookaround.feature.home.model.Effect
 import kky.flab.lookaround.feature.home.model.RecordUiState
+import kky.flab.lookaround.feature.home.model.SummaryUiState
 import kky.flab.lookaround.feature.home.model.UiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,12 +23,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
@@ -40,6 +47,9 @@ internal class HomeViewModel @Inject constructor(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val effect: SharedFlow<Effect> = _effect.asSharedFlow()
+
+    private val _summaryFilter: MutableStateFlow<SummaryFilter> =
+        MutableStateFlow(SummaryFilter.MONTH)
 
     private lateinit var cachedConfig: Config
 
@@ -70,6 +80,15 @@ internal class HomeViewModel @Inject constructor(
 
             _state.update { it.copy(recording = recording) }
         }.launchIn(viewModelScope)
+
+        _summaryFilter
+            .flatMapLatest { recordRepository.getSummary(it) }
+            .flowOn(Dispatchers.Default)
+            .onEach { summary ->
+                _state.update { prev ->
+                    prev.copy(summaryUiState = SummaryUiState.Result(summary))
+                }
+            }.launchIn(viewModelScope)
     }
 
     fun showRecordingMessage() {
@@ -115,5 +134,9 @@ internal class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun changeSummaryFilter(filter: SummaryFilter) {
+        _summaryFilter.value = filter
     }
 }
