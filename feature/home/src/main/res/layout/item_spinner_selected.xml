@@ -5,5 +5,4 @@
     android:textColor="?attr/colorOnSurface"
     android:textStyle="bold"
     android:textSize="14dp">
-
 </TextView>
