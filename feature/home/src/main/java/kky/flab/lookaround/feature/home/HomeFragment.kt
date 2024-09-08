@@ -5,13 +5,20 @@ import android.content.Context.LOCATION_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Typeface
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -23,17 +30,21 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Weather
 import kky.flab.lookaround.core.ui.util.getAddress
+import kky.flab.lookaround.core.ui.util.getThemeColor
 import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
 import kky.flab.lookaround.feature.home.databinding.FragmentHomeBinding
 import kky.flab.lookaround.feature.home.model.Effect
+import kky.flab.lookaround.feature.home.model.SummaryUiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
 import kky.flab.lookaround.feature.home.service.RecordService
 import kky.flab.lookaround.feature.recording.RecordingActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -81,6 +92,36 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() {
+        binding.spFilter.adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_spinner_selected,
+            SummaryFilter.entries.toTypedArray().map {
+                when(it) {
+                    SummaryFilter.WEEK -> "일주일"
+                    SummaryFilter.MONTH -> "한달"
+                    SummaryFilter.YEAR -> "1년"
+                }
+            }
+        ).apply {
+            setDropDownViewResource(R.layout.item_drop_down)
+        }
+
+        binding.spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                viewModel.changeSummaryFilter(SummaryFilter.entries[position])
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                //none
+            }
+
+        }
+
         binding.statusCard.setOnClickListener {
             startRecording()
         }
@@ -104,6 +145,7 @@ class HomeFragment : Fragment() {
                 viewModel.state.collect {
                     handleRecordingState(it.recording)
                     handleWeatherState(it.weatherUiState)
+                    handleSummaryState(it.summaryUiState)
                 }
             }
         }
@@ -181,6 +223,37 @@ class HomeFragment : Fragment() {
                 binding.tvTemperaturesData.text = "${data.temperatures}도"
                 binding.tvPrecipitationData.text = "${data.precipitation}mm"
                 binding.tvWindSpeedData.text = "${data.windSpeed}m/s"
+            }
+        }
+    }
+
+    private fun handleSummaryState(state: SummaryUiState) {
+        binding.pbSummary.isVisible = state is SummaryUiState.Loading
+        binding.llSummary.isVisible = state is SummaryUiState.Result
+        binding.tvSummaryEmpty.isVisible = state is SummaryUiState.Empty
+
+        when(state) {
+            SummaryUiState.Loading -> { /* none */}
+            SummaryUiState.Empty -> { /* none */}
+            is SummaryUiState.Result -> {
+                val count = state.summary.count.toString() + "회"
+                val time = StringBuilder().apply {
+                    val data = state.summary.time
+                    val hour = TimeUnit.MILLISECONDS.toHours(data)
+                    if (hour > 0) {
+                        append("${hour}시간")
+                    }
+                    val minutes = TimeUnit.MILLISECONDS.toMinutes(data) % 60
+                    if (minutes > 0) {
+                        append("${minutes}분")
+                    }
+                }
+
+                val mostOfWeek = state.summary.mostDayOfWeek + "요일"
+
+                binding.tvSummaryCount.text = getSpannable("이 기간 동안 산책 $count", count)
+                binding.tvSummaryTime.text = getSpannable("총 산책한 시간은 $time", time.toString())
+                binding.tvSummaryBestDayOfWeek.text = getSpannable("산책을 가장 자주 한 날은 $mostOfWeek", mostOfWeek)
             }
         }
     }
@@ -303,5 +376,24 @@ class HomeFragment : Fragment() {
 
             viewModel.loadWeather(parseResult.nx, parseResult.ny)
         }
+    }
+
+    private fun getSpannable(arg: String, target: String): Spannable {
+        val builder = SpannableStringBuilder(arg)
+        val targetIndex = arg.indexOf(target)
+        builder.setSpan(
+            StyleSpan(Typeface.BOLD),
+            targetIndex,
+            targetIndex + target.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        builder.setSpan(
+            ForegroundColorSpan(requireContext().getThemeColor(androidx.appcompat.R.attr.colorPrimary)),
+            targetIndex,
+            targetIndex + target.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return builder
     }
 }

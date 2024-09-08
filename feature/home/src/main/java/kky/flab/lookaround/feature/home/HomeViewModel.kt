@@ -86,7 +86,11 @@ internal class HomeViewModel @Inject constructor(
             .flowOn(Dispatchers.Default)
             .onEach { summary ->
                 _state.update { prev ->
-                    prev.copy(summaryUiState = SummaryUiState.Result(summary))
+                    prev.copy(
+                        summaryUiState =
+                        if (summary.count == 0) SummaryUiState.Empty
+                        else SummaryUiState.Result(summary)
+                    )
                 }
             }.launchIn(viewModelScope)
     }
