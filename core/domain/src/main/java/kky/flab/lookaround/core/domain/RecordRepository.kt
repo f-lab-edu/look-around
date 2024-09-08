@@ -1,7 +1,9 @@
 package kky.flab.lookaround.core.domain
 
+import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.core.domain.model.Record
+import kky.flab.lookaround.core.domain.model.Summary
 import kotlinx.coroutines.flow.Flow
 
 interface RecordRepository {
@@ -25,4 +27,6 @@ interface RecordRepository {
     suspend fun endRecording(): Long
 
     fun addPath(path: Path)
+
+    fun getSummary(filter: SummaryFilter): Flow<Summary>
 }
