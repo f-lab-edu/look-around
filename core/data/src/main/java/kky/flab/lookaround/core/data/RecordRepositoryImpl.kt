@@ -25,10 +25,10 @@ internal class RecordRepositoryImpl @Inject constructor(
 ) : RecordRepository {
 
     private val _recording: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    override val recording: Flow<Boolean> = _recording.asStateFlow()
+    override val recordingFlow: Flow<Boolean> = _recording.asStateFlow()
 
     private val _recordingState: MutableStateFlow<Record> = MutableStateFlow(Record.EMPTY)
-    override val recordingState: StateFlow<Record> = _recordingState.asStateFlow()
+    override val recordingStateFlow: StateFlow<Record> = _recordingState.asStateFlow()
 
     override suspend fun saveRecord(record: Record): Long {
         return recordDao.insertRecord(
@@ -36,7 +36,7 @@ internal class RecordRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getRecords(): Flow<List<Record>> =
+    override fun flowRecords(): Flow<List<Record>> =
         recordDao.getRecords().map { entities ->
             entities.map { it.toDomain() }
         }
@@ -77,7 +77,7 @@ internal class RecordRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getSummary(filter: SummaryFilter): Flow<Summary> {
+    override fun flowSummary(filter: SummaryFilter): Flow<Summary> {
         return recordDao.getRecords().map { entities ->
             if (entities.isEmpty()) {
                 return@map Summary(

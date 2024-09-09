@@ -56,7 +56,7 @@ class RecordService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
 
         lifecycleScope.launch {
-            recordRepository.recording.collect { recording ->
+            recordRepository.recordingFlow.collect { recording ->
                 if (recording.not()) {
                     stopSelf()
                 }

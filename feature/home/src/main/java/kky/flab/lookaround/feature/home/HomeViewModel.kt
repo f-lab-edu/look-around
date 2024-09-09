@@ -56,7 +56,7 @@ internal class HomeViewModel @Inject constructor(
     val config = configRepository.configFlow
 
     init {
-        recordRepository.getRecords()
+        recordRepository.flowRecords()
             .catch {
                 _effect.tryEmit(
                     Effect.Error(
@@ -73,7 +73,7 @@ internal class HomeViewModel @Inject constructor(
             cachedConfig = it
         }.launchIn(viewModelScope)
 
-        recordRepository.recording.onEach { recording ->
+        recordRepository.recordingFlow.onEach { recording ->
             if (recording) {
                 _effect.tryEmit(Effect.StartRecordingService)
             }
@@ -82,7 +82,7 @@ internal class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
 
         _summaryFilter
-            .flatMapLatest { recordRepository.getSummary(it) }
+            .flatMapLatest { recordRepository.flowSummary(it) }
             .flowOn(Dispatchers.Default)
             .onEach { summary ->
                 _state.update { prev ->

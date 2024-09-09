@@ -28,7 +28,7 @@ class RecordingViewModel @Inject constructor(
 ) : ViewModel() {
 
     val state: StateFlow<RecordingUiState> = recordRepository
-        .recordingState
+        .recordingStateFlow
         .map { record ->
             RecordingUiState(
                 path = record.path.map { LatLng(it.latitude, it.longitude) },
@@ -42,7 +42,7 @@ class RecordingViewModel @Inject constructor(
         )
 
     val timer: Flow<Long> = flow {
-        val first = recordRepository.recordingState.first()
+        val first = recordRepository.recordingStateFlow.first()
         while (true) {
             emit(System.currentTimeMillis() - first.startTimeStamp)
             delay(1000)

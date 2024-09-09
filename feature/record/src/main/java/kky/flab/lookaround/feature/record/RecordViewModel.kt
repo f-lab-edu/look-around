@@ -25,7 +25,7 @@ class RecordViewModel @Inject constructor(
     val state: StateFlow<RecordUiState> = _state.asStateFlow()
 
     init {
-        recordRepository.getRecords()
+        recordRepository.flowRecords()
             .map { record -> record.map { it.toUiModel() } }
             .onEach { _state.value = RecordUiState.Result(records = it) }
             .launchIn(viewModelScope)

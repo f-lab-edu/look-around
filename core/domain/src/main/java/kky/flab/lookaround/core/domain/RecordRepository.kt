@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecordRepository {
 
-    val recording: Flow<Boolean>
+    val recordingFlow: Flow<Boolean>
 
-    val recordingState: Flow<Record>
+    val recordingStateFlow: Flow<Record>
 
-    fun getRecords(): Flow<List<Record>>
+    fun flowRecords(): Flow<List<Record>>
 
     suspend fun getRecord(id: Long): Record
 
@@ -28,5 +28,5 @@ interface RecordRepository {
 
     fun addPath(path: Path)
 
-    fun getSummary(filter: SummaryFilter): Flow<Summary>
+    fun flowSummary(filter: SummaryFilter): Flow<Summary>
 }
