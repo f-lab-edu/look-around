@@ -79,8 +79,34 @@ internal class RecordRepositoryImpl @Inject constructor(
 
     override fun flowSummary(filter: SummaryFilter): Flow<Summary> {
         return recordDao.getRecords().map { entities ->
-            if (entities.isEmpty()) {
-                return@map Summary(
+            if (entities.isNotEmpty()) {
+                val start = GregorianCalendar().apply {
+                    add(Calendar.DAY_OF_YEAR, -filter.days)
+                    set(Calendar.HOUR, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                val end = GregorianCalendar()
+
+                val searched =
+                    entities.filter { record -> record.startTimeStamp >= start.timeInMillis && record.endTimeStamp <= end.timeInMillis }
+                val count = searched.size
+                val time = searched.sumOf { record -> record.endTimeStamp - record.startTimeStamp }
+                val bestDayOfWeek = searched
+                    .groupBy { record -> record.startTimeStamp.toDayOfWeek() }
+                    .maxBy { entry -> entry.value.size }
+                    .key
+
+                Summary(
+                    count = count,
+                    time = time,
+                    mostDayOfWeek = bestDayOfWeek,
+                    startTime = start.timeInMillis,
+                    endTime = end.timeInMillis
+                )
+            } else {
+                Summary(
                     count = 0,
                     time = 0,
                     startTime = 0,
@@ -88,32 +114,6 @@ internal class RecordRepositoryImpl @Inject constructor(
                     mostDayOfWeek = "-",
                 )
             }
-
-            val start = GregorianCalendar().apply {
-                add(Calendar.DAY_OF_YEAR, -filter.days)
-                set(Calendar.HOUR, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-            val end = GregorianCalendar()
-
-            val searched =
-                entities.filter { record -> record.startTimeStamp >= start.timeInMillis && record.endTimeStamp <= end.timeInMillis }
-            val count = searched.size
-            val time = searched.sumOf { record -> record.endTimeStamp - record.startTimeStamp }
-            val bestDayOfWeek = searched
-                .groupBy { record -> record.startTimeStamp.toDayOfWeek() }
-                .maxBy { entry -> entry.value.size }
-                .key
-
-            Summary(
-                count = count,
-                time = time,
-                mostDayOfWeek = bestDayOfWeek,
-                startTime = start.timeInMillis,
-                endTime = end.timeInMillis
-            )
         }
     }
 
