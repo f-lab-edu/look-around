@@ -62,8 +62,7 @@
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/status_card"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/status_card">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -131,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="기온"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@id/tv_temperatures_data"
@@ -143,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
                     app:layout_constraintEnd_toStartOf="@id/tv_precipitation"
@@ -157,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="강수량"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
@@ -170,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
                     app:layout_constraintEnd_toStartOf="@id/tv_wind_speed"
@@ -184,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="풍속"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
@@ -197,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:textColor="@color/black"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_temperatures"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -212,6 +211,94 @@
                     app:constraint_referenced_ids="img_sky,tv_temperatures,tv_temperatures_data,
                     tv_precipitation,tv_precipitation_data,tv_wind_speed,tv_wind_speed_data" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/summary_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_space"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weather_card"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- 로딩 -->
+            <ProgressBar
+                android:id="@+id/pb_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <!-- Empty  -->
+            <TextView
+                android:id="@+id/tv_summary_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="아직 산책을 하지 않았어요.\n산책을 시작하고 기록을 남겨보세요!"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14dp"
+                android:padding="16dp"/>
+            <!-- 내용 -->
+            <LinearLayout
+                android:id="@+id/ll_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <Spinner
+                    android:id="@+id/sp_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_spinner"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="12dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginStart="16dp"
+                    tools:text="일주일"/>
+                <TextView
+                    android:id="@+id/tv_summary_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_summary_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_message" />
+                <TextView
+                    android:id="@+id/tv_summary_best_day_of_week"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_message" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
