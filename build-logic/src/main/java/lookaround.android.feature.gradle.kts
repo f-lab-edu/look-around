@@ -2,6 +2,7 @@ import com.lookaround.app.libs
 
 plugins {
     id("lookaround.android.library")
+    id("lookaround.android.compose")
 }
 
 dependencies {
@@ -16,6 +17,8 @@ dependencies {
     implementation(libs.findLibrary("androidx.core.ktx").get())
     implementation(libs.findLibrary("material").get())
     implementation(libs.findLibrary("fragment.ktx").get())
+    implementation(libs.findLibrary("androidx.compose.navigation").get())
+    implementation(libs.findLibrary("hilt.navigation.compose").get())
     testImplementation(libs.findLibrary("junit").get())
     androidTestImplementation(libs.findLibrary("androidx.junit").get())
     androidTestImplementation(libs.findLibrary("androidx.espresso.core").get())

@@ -3,7 +3,7 @@ minSdk = "28"
 targetSdk = "34"
 compileSdk = "34"
 agp = "8.3.2"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -24,8 +24,8 @@ coroutine = "1.8.1"
 #https://developer.android.com/jetpack/androidx/releases/room?hl=ko
 room = "2.6.1"
 
-
-ksp = "1.9.24-1.0.20"
+# https://github.com/google/ksp/
+ksp = "2.0.0-1.0.24"
 
 #moshi
 #https://github.com/square/moshi/tags
@@ -38,6 +38,9 @@ retrofit2 = "2.11.0"
 #Dagger-Hilt
 #https://github.com/google/dagger/releases
 hilt = "2.51.1"
+
+# https://developer.android.com/jetpack/androidx/releases/hilt
+hiltNavigationCompose = "1.2.0"
 
 #https://square.github.io/okhttp/changelogs/changelog/
 okhttp3 = "4.9.0"
@@ -53,6 +56,12 @@ poi = "3.9"
 #https://repository.map.naver.com/browse/maven/com/naver/maps/map-sdk
 naver-map = "3.18.0"
 
+#https://developer.android.com/develop/ui/compose/bom/bom-mapping
+androidxComposeBom = "2024.08.00"
+
+#https://developer.android.com/jetpack/androidx/releases/navigation
+androidxComposeNavigation = "2.8.0"
+
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -63,18 +72,20 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleVersion" }
-#androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-#androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-#androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-#androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 #androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 #androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-#androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx"}
+androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
 android-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "android-navigation"}
 android-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "android-navigation"}
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
@@ -97,6 +108,7 @@ moshi-retrofit2-converter = { group = "com.squareup.retrofit2", name = "converte
 
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "hilt"}
 hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt"}
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine"}
 
@@ -107,6 +119,7 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-library = { id = "com.android.library", version.ref = "agp" }
 hiltPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [bundles]
 retrofit2 = [
