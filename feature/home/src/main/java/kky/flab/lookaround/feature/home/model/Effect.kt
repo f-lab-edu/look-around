@@ -1,6 +1,6 @@
 package kky.flab.lookaround.feature.home.model
 
-internal sealed interface Effect {
+sealed interface Effect {
     data object ShowStartRecordingMessage: Effect
 
     data object ShowEndRecordingMessage: Effect

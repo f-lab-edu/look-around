@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
     private val weatherRepository: WeatherRepository,
     private val configRepository: ConfigRepository,
