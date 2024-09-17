@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.findLibrary("androidx.core.ktx").get())
     implementation(libs.findLibrary("material").get())
     implementation(libs.findLibrary("fragment.ktx").get())
+    implementation(libs.findLibrary("androidx.lifecycle.runtime.compose").get())
     implementation(libs.findLibrary("androidx.compose.navigation").get())
     implementation(libs.findLibrary("hilt.navigation.compose").get())
     testImplementation(libs.findLibrary("junit").get())
