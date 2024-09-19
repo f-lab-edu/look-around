@@ -9,7 +9,6 @@ import kky.flab.lookaround.core.domain.WeatherRepository
 import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Config
 import kky.flab.lookaround.feature.home.model.Effect
-import kky.flab.lookaround.feature.home.model.RecordUiState
 import kky.flab.lookaround.feature.home.model.SummaryUiState
 import kky.flab.lookaround.feature.home.model.UiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
@@ -51,7 +50,7 @@ class HomeViewModel @Inject constructor(
     private val _summaryFilter: MutableStateFlow<SummaryFilter> =
         MutableStateFlow(SummaryFilter.MONTH)
 
-    private lateinit var cachedConfig: Config
+    private var cachedConfig: Config = Config.Default
 
     val config = configRepository.configFlow
 
@@ -63,14 +62,13 @@ class HomeViewModel @Inject constructor(
                         message = it.message ?: "알 수 없는 오류가 발생했습니다."
                     )
                 )
-            }.onEach {
-                _state.value = _state.value.copy(
-                    recordState = RecordUiState.Result(it)
-                )
             }.launchIn(viewModelScope)
 
-        configRepository.configFlow.onEach {
-            cachedConfig = it
+        configRepository.configFlow.onEach { config ->
+            cachedConfig = config
+            _state.update { value ->
+                value.copy(initializedConfig = true)
+            }
         }.launchIn(viewModelScope)
 
         recordRepository.recordingFlow.onEach { recording ->
@@ -109,7 +107,7 @@ class HomeViewModel @Inject constructor(
         recordRepository.startRecording()
     }
 
-    fun updateRequestedFinLocation() {
+    fun updateRequestedFineLocation() {
         viewModelScope.launch {
             configRepository.updateConfig(
                 cachedConfig.copy(
@@ -141,6 +139,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun changeSummaryFilter(filter: SummaryFilter) {
+        _state.update { value -> value.copy(summaryFilter = filter) }
         _summaryFilter.value = filter
+    }
+
+    fun onDenyPermissionForWeather() {
+        _state.update {
+            it.copy(
+                weatherUiState = WeatherUiState.Fail("권한을 허용해주세요.")
+            )
+        }
     }
 }
