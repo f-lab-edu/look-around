@@ -67,7 +67,10 @@ class HomeViewModel @Inject constructor(
         configRepository.configFlow.onEach { config ->
             cachedConfig = config
             _state.update { value ->
-                value.copy(initializedConfig = true)
+                value.copy(
+                    initializedConfig = true,
+                    hasAskedLocationPermission = config.requestFineLocation,
+                )
             }
         }.launchIn(viewModelScope)
 
@@ -93,16 +96,6 @@ class HomeViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    fun showRecordingMessage() {
-        val recording = state.value.recording
-
-        if (recording) {
-            _effect.tryEmit(Effect.ShowEndRecordingMessage)
-        } else {
-            _effect.tryEmit(Effect.ShowStartRecordingMessage)
-        }
-    }
-
     fun startRecording() {
         recordRepository.startRecording()
     }
@@ -119,11 +112,6 @@ class HomeViewModel @Inject constructor(
 
     fun loadWeather(nx: Int, ny: Int) {
         viewModelScope.launch {
-            //재시도 클릭 시 로딩상태로 바꿈
-            if (state.value.weatherUiState is WeatherUiState.Fail) {
-                _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
-            }
-
             runCatching {
                 weatherRepository.getRealTimeWeather(nx, ny)
             }.onFailure {
@@ -153,6 +141,12 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 weatherUiState = WeatherUiState.Fail("권한을 허용해주세요.")
             )
+        }
+    }
+
+    fun updateWeatherStateLoading() {
+        if (state.value.weatherUiState is WeatherUiState.Fail) {
+            _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
         }
     }
 }
