@@ -5,8 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextStyle
-import kky.flab.lookaround.core.ui.theme.Black
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun LookaroundAlertDialog(
@@ -14,7 +13,6 @@ fun LookaroundAlertDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     showDismissButton: Boolean = true,
-    textStyle: TextStyle = MaterialTheme.typography.bodyMedium.copy(color = Black)
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -36,11 +34,8 @@ fun LookaroundAlertDialog(
                 }
             )
         },
-        text = {
-            Text(
-                text = text,
-                style = textStyle
-            )
-        }
+        text = { Text(text = text) },
+        textContentColor = MaterialTheme.colorScheme.onSurface,
+        tonalElevation = 0.dp
     )
 }
