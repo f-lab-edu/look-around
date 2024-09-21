@@ -1,5 +1,6 @@
 package kky.flab.lookaround.feature.home.component
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,17 +54,13 @@ private fun ResultContent(
     uiState: WeatherUiState.Result,
     modifier: Modifier = Modifier,
 ) {
-    val imageResId = when (uiState.data.sky) {
+    val imageResId = when (uiState.sky) {
         Weather.Sky.SUNNY -> R.drawable.sunny
         Weather.Sky.CLOUDY -> R.drawable.cloudy
         Weather.Sky.OVERCAST -> R.drawable.overcast
         Weather.Sky.RAINY -> R.drawable.rainy
         Weather.Sky.SNOW -> R.drawable.snow
     }
-
-    val temperatures = "${uiState.data.temperatures}도"
-    val precipitation = "${uiState.data.precipitation}mm"
-    val windSpeed = "${uiState.data.windSpeed}m/s"
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,9 +78,9 @@ private fun ResultContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            WeatherDataRow(title = "기온", content = temperatures)
-            WeatherDataRow(title = "강수량", content = precipitation)
-            WeatherDataRow(title = "풍속", content = windSpeed)
+            WeatherDataRow(title = "기온", content = uiState.temperatures)
+            WeatherDataRow(title = "강수량", content = uiState.precipitation)
+            WeatherDataRow(title = "풍속", content = uiState.windSpeed)
         }
     }
 }
@@ -117,6 +114,7 @@ private fun WeatherDataRow(
     title: String,
     content: String,
 ) {
+
     Row {
         Text(
             text = title,
@@ -139,14 +137,10 @@ internal class WeatherCardPreviewParameter : PreviewParameterProvider<WeatherUiS
             WeatherUiState.Fail("Preview fail message"),
             WeatherUiState.Loading,
             WeatherUiState.Result(
-                Weather(
-                    sky = Weather.Sky.SUNNY,
-                    precipitation = 1.0,
-                    windSpeed = 15,
-                    temperatures = 27,
-                    time = "",
-                    thunderStroke = 0.0,
-                )
+                sky = Weather.Sky.SUNNY,
+                precipitation = "1.0mm",
+                windSpeed = "15m/s",
+                temperatures = "16도",
             ),
         )
 }

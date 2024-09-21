@@ -239,14 +239,10 @@ fun HomeScreenPreview() {
                 initializedConfig = true,
                 summaryFilter = SummaryFilter.WEEK,
                 weatherUiState = WeatherUiState.Result(
-                    Weather(
-                        sky = Weather.Sky.SUNNY,
-                        precipitation = 1.0,
-                        windSpeed = 15,
-                        temperatures = 27,
-                        time = "",
-                        thunderStroke = 0.0,
-                    )
+                    sky = Weather.Sky.SUNNY,
+                    precipitation = "1.0mm",
+                    windSpeed = "15m/s",
+                    temperatures = "16도",
                 ),
                 summaryUiState = SummaryUiState.Result(
                     Summary(

@@ -132,7 +132,12 @@ class HomeViewModel @Inject constructor(
                 )
             }.onSuccess {
                 _state.value = _state.value.copy(
-                    weatherUiState = WeatherUiState.Result(it)
+                    weatherUiState = WeatherUiState.Result(
+                        temperatures = "${it.temperatures}도",
+                        precipitation = "${it.precipitation}mm",
+                        windSpeed = "${it.windSpeed}m/s",
+                        sky = it.sky
+                    )
                 )
             }
         }
