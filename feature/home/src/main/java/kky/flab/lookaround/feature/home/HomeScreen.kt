@@ -25,25 +25,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.internal.managers.FragmentComponentManager
 import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Summary
 import kky.flab.lookaround.core.domain.model.Weather
+import kky.flab.lookaround.core.ui.component.LookaroundAlertDialog
 import kky.flab.lookaround.core.ui.theme.LookaroundTheme
 import kky.flab.lookaround.core.ui.util.getAddress
 import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
-import kky.flab.lookaround.feature.home.component.DialogType
 import kky.flab.lookaround.feature.home.component.HomeSummaryFilterBottomSheet
-import kky.flab.lookaround.feature.home.component.LocationPermissionDialog
 import kky.flab.lookaround.feature.home.component.RecordingStateCard
-import kky.flab.lookaround.feature.home.component.StartRecordDialog
 import kky.flab.lookaround.feature.home.component.SummaryCard
 import kky.flab.lookaround.feature.home.component.WeatherCard
 import kky.flab.lookaround.feature.home.model.Effect
@@ -53,7 +51,6 @@ import kky.flab.lookaround.feature.home.model.WeatherUiState
 import kky.flab.lookaround.feature.home.service.RecordService
 import kky.flab.lookaround.feature.recording.RecordingActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -71,7 +68,7 @@ fun HomeScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    var showAlertDialog by remember { mutableStateOf(DialogType.Dismiss) }
+    var showAlertDialog by remember { mutableStateOf(HomeDialogType.Dismiss) }
 
     var showSummaryFilterBottomSheet by remember { mutableStateOf(false) }
 
@@ -111,7 +108,7 @@ fun HomeScreen(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                showAlertDialog = DialogType.StartRecord
+                showAlertDialog = HomeDialogType.StartRecord
             } else {
                 /* 스낵바 */
             }
@@ -131,7 +128,7 @@ fun HomeScreen(
                 loadWeather()
             } else {
                 if (askedLocationPermission.not()) {
-                    showAlertDialog = DialogType.LoadWeatherPermission
+                    showAlertDialog = HomeDialogType.LoadWeatherPermission
                     askedLocationPermission = true
                 }
             }
@@ -139,10 +136,11 @@ fun HomeScreen(
     }
 
     when (showAlertDialog) {
-        DialogType.Dismiss -> {}
+        HomeDialogType.Dismiss -> {}
 
-        DialogType.LoadWeatherPermission -> LocationPermissionDialog(
-            onDismiss = { showAlertDialog = DialogType.Dismiss },
+        HomeDialogType.LoadWeatherPermission -> LookaroundAlertDialog(
+            text = stringResource(R.string.request_location_permission_message),
+            onDismiss = { showAlertDialog = HomeDialogType.Dismiss },
             onConfirm = {
                 val activity = FragmentComponentManager.findActivity(context) as Activity
                 val shouldShowPermissionRationale = homeScreenPermissions
@@ -166,15 +164,16 @@ fun HomeScreen(
                         viewModel.updateRequestedFineLocation()
                     }
                 }
-                showAlertDialog = DialogType.Dismiss
+                showAlertDialog = HomeDialogType.Dismiss
             }
         )
 
-        DialogType.StartRecord -> StartRecordDialog(
-            onDismiss = { showAlertDialog = DialogType.Dismiss },
+        HomeDialogType.StartRecord -> LookaroundAlertDialog(
+            text = stringResource(R.string.start_record_message),
+            onDismiss = { showAlertDialog = HomeDialogType.Dismiss },
             onConfirm = {
                 viewModel.startRecording()
-                showAlertDialog = DialogType.Dismiss
+                showAlertDialog = HomeDialogType.Dismiss
             }
         )
     }
@@ -223,7 +222,7 @@ fun HomeScreen(
             if (homeScreenPermissions.checkPermission()) {
                 loadWeather()
             } else {
-                showAlertDialog = DialogType.LoadWeatherPermission
+                showAlertDialog = HomeDialogType.LoadWeatherPermission
             }
         },
         onClickFilter = {
@@ -302,4 +301,10 @@ fun HomeScreenPreview() {
             onClickFilter = {},
         )
     }
+}
+
+private enum class HomeDialogType {
+    Dismiss,
+    LoadWeatherPermission,
+    StartRecord,
 }
