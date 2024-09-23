@@ -77,11 +77,18 @@ fun HomeScreen(
     fun loadWeather() {
         viewModel.updateWeatherStateLoading()
         scope.launch {
-            val address = getAddress(context) ?: return@launch
-            val parseResult = withContext(Dispatchers.IO) {
-                XlsxParser.findXY(context, address)
+            runCatching {
+                val address = getAddress(context) ?: return@launch
+                val parseResult = withContext(Dispatchers.IO) {
+                    XlsxParser.findXY(context, address)
+                }
+
+                parseResult
+            }.onFailure { cause ->
+                viewModel.updateWeatherStateLocationFail(cause)
+            }.onSuccess { parseResult ->
+                viewModel.loadWeather(parseResult.nx, parseResult.ny)
             }
-            viewModel.loadWeather(parseResult.nx, parseResult.ny)
         }
     }
 

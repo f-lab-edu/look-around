@@ -149,4 +149,8 @@ class HomeViewModel @Inject constructor(
             _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
         }
     }
+
+    fun updateWeatherStateLocationFail(cause: Throwable) {
+        _state.update { it.copy(weatherUiState = WeatherUiState.Fail(cause.message ?: "주소를 가져오는 데 실패하였습니다.\n다시 시도해주세요.")) }
+    }
 }
