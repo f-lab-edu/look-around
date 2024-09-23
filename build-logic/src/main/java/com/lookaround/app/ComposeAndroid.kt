@@ -14,16 +14,15 @@ fun Project.configureComposeAndroid() {
         }
     }
 
-    val libs = extensions.libs
     dependencies {
-        val bom = platform(libs.findLibrary("androidx-compose-bom").get())
+        val bom = platform(findLibrary("androidx-compose-bom"))
         "implementation"(bom)
 
-        "implementation"(libs.findLibrary("androidx-ui").get())
-        "implementation"(libs.findLibrary("androidx-material3").get())
-        "implementation"(libs.findLibrary("androidx-ui-graphics").get())
-        "implementation"(libs.findLibrary("androidx-ui-tooling-preview").get())
-        "implementation"(libs.findLibrary("androidx-ui-tooling").get())
-        "implementation"(libs.findLibrary("androidx-compose-navigation").get())
+        "implementation"(findLibrary("androidx-ui"))
+        "implementation"(findLibrary("androidx-material3"))
+        "implementation"(findLibrary("androidx-ui-graphics"))
+        "implementation"(findLibrary("androidx-ui-tooling-preview"))
+        "implementation"(findLibrary("androidx-ui-tooling"))
+        "implementation"(findLibrary("androidx-compose-navigation"))
     }
 }
