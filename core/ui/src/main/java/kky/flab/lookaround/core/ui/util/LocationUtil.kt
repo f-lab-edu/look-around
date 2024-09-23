@@ -13,7 +13,8 @@ import kotlin.coroutines.suspendCoroutine
 
 @SuppressLint("MissingPermission")
 suspend fun getAddress(context: Context): Address? = suspendCoroutine { continuation ->
-    LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener { location ->
+    val locationServices = LocationServices.getFusedLocationProviderClient(context)
+    locationServices.lastLocation.addOnSuccessListener { location ->
         location?.let {
             val geocoder = Geocoder(context, Locale.KOREA)
             if (Build.VERSION_CODES.TIRAMISU > Build.VERSION.SDK_INT) {
@@ -25,7 +26,7 @@ suspend fun getAddress(context: Context): Address? = suspendCoroutine { continua
                 }
             }
         } ?: continuation.resumeWithException(
-            IllegalStateException("주소를 가져올 수 없습니다.\n위치 서비스가 활성화 되있는 지 확인해주세요.")
+            IllegalStateException("주소를 가져올 수 없습니다.\n위치 서비스 또는 인터넷 연결을 확인해주세요.")
         )
     }.addOnFailureListener { e ->
         continuation.resumeWithException(Exception("주소를 가져오는 데 실패하였습니다.\n재시도 해주세요.",e))

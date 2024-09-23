@@ -9,9 +9,8 @@ fun Project.configureHiltAndroid() {
         apply("com.google.devtools.ksp")
     }
 
-    val libs = extensions.libs
     dependencies {
-        "implementation"(libs.findLibrary("hilt").get())
-        "ksp"(libs.findLibrary("hiltCompiler").get())
+        "implementation"(findLibrary("hilt"))
+        "ksp"(findLibrary("hiltCompiler"))
     }
 }

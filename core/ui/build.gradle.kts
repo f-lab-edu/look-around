@@ -1,5 +1,6 @@
 plugins {
     id("lookaround.android.library")
+    id("lookaround.android.compose")
 }
 
 android {

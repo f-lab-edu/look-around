@@ -1,22 +1,25 @@
-import com.lookaround.app.libs
+import com.lookaround.app.findLibrary
 
 plugins {
     id("lookaround.android.library")
+    id("lookaround.android.compose")
 }
 
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
 
-    val libs = project.extensions.libs
-    implementation(libs.findLibrary("androidx.core.ktx").get())
-    implementation(libs.findLibrary("androidx.appcompat").get())
-    implementation(libs.findLibrary("androidx.activity").get())
-    implementation(libs.findLibrary("androidx.constraintlayout").get())
-    implementation(libs.findLibrary("androidx.core.ktx").get())
-    implementation(libs.findLibrary("material").get())
-    implementation(libs.findLibrary("fragment.ktx").get())
-    testImplementation(libs.findLibrary("junit").get())
-    androidTestImplementation(libs.findLibrary("androidx.junit").get())
-    androidTestImplementation(libs.findLibrary("androidx.espresso.core").get())
+    implementation(findLibrary("androidx.core.ktx"))
+    implementation(findLibrary("androidx.appcompat"))
+    implementation(findLibrary("androidx.activity"))
+    implementation(findLibrary("androidx.constraintlayout"))
+    implementation(findLibrary("androidx.core.ktx"))
+    implementation(findLibrary("material"))
+    implementation(findLibrary("fragment.ktx"))
+    implementation(findLibrary("androidx.lifecycle.runtime.compose"))
+    implementation(findLibrary("androidx.compose.navigation"))
+    implementation(findLibrary("hilt.navigation.compose"))
+    testImplementation(findLibrary("junit"))
+    androidTestImplementation(findLibrary("androidx.junit"))
+    androidTestImplementation(findLibrary("androidx.espresso.core"))
 }

@@ -9,7 +9,6 @@ import kky.flab.lookaround.core.domain.WeatherRepository
 import kky.flab.lookaround.core.domain.const.SummaryFilter
 import kky.flab.lookaround.core.domain.model.Config
 import kky.flab.lookaround.feature.home.model.Effect
-import kky.flab.lookaround.feature.home.model.RecordUiState
 import kky.flab.lookaround.feature.home.model.SummaryUiState
 import kky.flab.lookaround.feature.home.model.UiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
@@ -33,7 +32,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-internal class HomeViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     private val recordRepository: RecordRepository,
     private val weatherRepository: WeatherRepository,
     private val configRepository: ConfigRepository,
@@ -51,7 +50,7 @@ internal class HomeViewModel @Inject constructor(
     private val _summaryFilter: MutableStateFlow<SummaryFilter> =
         MutableStateFlow(SummaryFilter.MONTH)
 
-    private lateinit var cachedConfig: Config
+    private var cachedConfig: Config = Config.Default
 
     val config = configRepository.configFlow
 
@@ -63,14 +62,16 @@ internal class HomeViewModel @Inject constructor(
                         message = it.message ?: "알 수 없는 오류가 발생했습니다."
                     )
                 )
-            }.onEach {
-                _state.value = _state.value.copy(
-                    recordState = RecordUiState.Result(it)
-                )
             }.launchIn(viewModelScope)
 
-        configRepository.configFlow.onEach {
-            cachedConfig = it
+        configRepository.configFlow.onEach { config ->
+            cachedConfig = config
+            _state.update { value ->
+                value.copy(
+                    initializedConfig = true,
+                    hasAskedLocationPermission = config.requestFineLocation,
+                )
+            }
         }.launchIn(viewModelScope)
 
         recordRepository.recordingFlow.onEach { recording ->
@@ -95,21 +96,11 @@ internal class HomeViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    fun showRecordingMessage() {
-        val recording = state.value.recording
-
-        if (recording) {
-            _effect.tryEmit(Effect.ShowEndRecordingMessage)
-        } else {
-            _effect.tryEmit(Effect.ShowStartRecordingMessage)
-        }
-    }
-
     fun startRecording() {
         recordRepository.startRecording()
     }
 
-    fun updateRequestedFinLocation() {
+    fun updateRequestedFineLocation() {
         viewModelScope.launch {
             configRepository.updateConfig(
                 cachedConfig.copy(
@@ -121,11 +112,6 @@ internal class HomeViewModel @Inject constructor(
 
     fun loadWeather(nx: Int, ny: Int) {
         viewModelScope.launch {
-            //재시도 클릭 시 로딩상태로 바꿈
-            if (state.value.weatherUiState is WeatherUiState.Fail) {
-                _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
-            }
-
             runCatching {
                 weatherRepository.getRealTimeWeather(nx, ny)
             }.onFailure {
@@ -134,13 +120,37 @@ internal class HomeViewModel @Inject constructor(
                 )
             }.onSuccess {
                 _state.value = _state.value.copy(
-                    weatherUiState = WeatherUiState.Result(it)
+                    weatherUiState = WeatherUiState.Result(
+                        temperatures = "${it.temperatures}도",
+                        precipitation = "${it.precipitation}mm",
+                        windSpeed = "${it.windSpeed}m/s",
+                        sky = it.sky
+                    )
                 )
             }
         }
     }
 
     fun changeSummaryFilter(filter: SummaryFilter) {
+        _state.update { value -> value.copy(summaryFilter = filter) }
         _summaryFilter.value = filter
+    }
+
+    fun onDenyPermissionForWeather() {
+        _state.update {
+            it.copy(
+                weatherUiState = WeatherUiState.Fail("권한을 허용해주세요.")
+            )
+        }
+    }
+
+    fun updateWeatherStateLoading() {
+        if (state.value.weatherUiState is WeatherUiState.Fail) {
+            _state.update { it.copy(weatherUiState = WeatherUiState.Loading) }
+        }
+    }
+
+    fun updateWeatherStateLocationFail(cause: Throwable) {
+        _state.update { it.copy(weatherUiState = WeatherUiState.Fail(cause.message ?: "주소를 가져오는 데 실패하였습니다.\n다시 시도해주세요.")) }
     }
 }

@@ -8,4 +8,7 @@
     <string name="foreground_service_notification_channel_id">FgsNotificationChannelId</string>
     <string name="foreground_service_notification_channel_name">산책 기록</string>
 
+    <string name="request_location_permission_message">서비스를 이용하기 위해 자세한 위치 권한을 허용해주세요.</string>
+
+    <string name="start_record_message">산책을 시작해볼까요?</string>
 </resources>
