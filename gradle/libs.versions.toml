@@ -62,9 +62,11 @@ androidxComposeBom = "2024.08.00"
 #https://developer.android.com/jetpack/androidx/releases/navigation
 androidxComposeNavigation = "2.8.0"
 
-# https://developer.android.com/jetpack/androidx/releases/lifecycle
+#https://developer.android.com/jetpack/androidx/releases/lifecycle
 androidxLifecycle = "2.8.5"
 
+#https://github.com/skydoves/landscapist/releases
+landscapist = "2.3.8"
 
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -101,7 +103,6 @@ poi-common = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
 poi-oomxl = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
 naver-map = { group = "com.naver.maps", name = "map-sdk", version.ref = "naver-map" }
 
-
 aac-room = { module = "androidx.room:room-runtime", version.ref = "room" }
 aac-roomCompiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 aac-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -116,6 +117,9 @@ hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutine"}
+
+landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
+landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
