@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record_delete_message">이 기록을 삭제 하시겠습니까?</string>
+</resources>
