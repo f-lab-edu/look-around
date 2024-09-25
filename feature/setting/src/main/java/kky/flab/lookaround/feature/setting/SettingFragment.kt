@@ -1,43 +1,25 @@
 package kky.flab.lookaround.feature.setting
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
-import kky.flab.lookaround.feature.setting.databinding.FragmentSettingBinding
-import kotlinx.coroutines.launch
+import kky.flab.lookaround.core.ui.theme.LookaroundTheme
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
-
-    private lateinit var binding: FragmentSettingBinding
-
-    private val viewModel: SettingViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        return FragmentSettingBinding.inflate(inflater, container, false).also { binding = it }.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.swTheme.setOnCheckedChangeListener { _, checked ->
-            viewModel.setDarkMode(checked)
-        }
-
-        observe()
-    }
-
-    private fun observe() {
-        lifecycleScope.launch {
-            viewModel.configState.collect {
-                binding.swTheme.isChecked = it.darkTheme
+        return ComposeView(requireContext()).apply {
+            setContent {
+                LookaroundTheme {
+                    SettingScreen()
+                }
             }
         }
     }
