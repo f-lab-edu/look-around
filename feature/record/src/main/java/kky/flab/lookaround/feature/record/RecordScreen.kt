@@ -95,6 +95,7 @@ internal fun RecordScreen(
         ) {
             Text(
                 text = "내 산책",
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
             )
         }
