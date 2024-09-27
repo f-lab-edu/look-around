@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,17 +20,28 @@ import kky.flab.lookaround.core.ui_navigation.AppNavHost
 import kky.flab.lookaround.core.ui_navigation.route.MainRoute
 import kky.flab.lookaround.feature.main.component.MainBottomNavigation
 import kky.flab.lookaround.feature.main.component.MainTabs
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen() {
+    val snackBarHostState = remember { SnackbarHostState() }
 
     var currentTab by remember { mutableStateOf(MainTabs.Home) }
     val navController = rememberNavController()
+    val coroutineScope = rememberCoroutineScope()
+    val onShowSnackBar: (String) -> Unit = { message ->
+        coroutineScope.launch {
+            snackBarHostState.showSnackbar(
+                message = message,
+            )
+        }
+    }
 
     MainScreen(
         currentTab = currentTab,
         navController = navController,
-        onShowSnackBar = { _ -> TODO() },
+        snackBarHostState = snackBarHostState,
+        onShowSnackBar = onShowSnackBar,
         onTabChanged = { tab -> currentTab = tab }
     )
 }
@@ -36,10 +50,12 @@ fun MainScreen() {
 internal fun MainScreen(
     currentTab: MainTabs,
     navController: NavHostController,
+    snackBarHostState: SnackbarHostState,
     onShowSnackBar: (String) -> Unit,
     onTabChanged: (MainTabs) -> Unit,
 ) {
     Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         bottomBar = {
             MainBottomNavigation(
                 modifier = Modifier.navigationBarsPadding()

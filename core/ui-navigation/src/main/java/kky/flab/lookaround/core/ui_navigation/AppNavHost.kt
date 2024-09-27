@@ -20,7 +20,9 @@ fun AppNavHost(
         startDestination = MainRoute.Home
     ) {
         composable<MainRoute.Home> {
-            HomeScreen()
+            HomeScreen(
+                onShowSnackBar = onShowSnackBar
+            )
         }
         composable<MainRoute.Record> {
             RecordScreen()
