@@ -1,12 +1,14 @@
 package kky.flab.lookaround.core.ui.theme
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -29,6 +31,7 @@ val DarkColorScheme = darkColorScheme(
     onSurfaceVariant = LightGray,
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LookaroundTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -46,5 +49,9 @@ fun LookaroundTheme(
     window.statusBarColor = colorScheme.background.toArgb()
     window.navigationBarColor = colorScheme.background.toArgb()
 
-    MaterialTheme(colorScheme = colorScheme, content = content)
+    CompositionLocalProvider(
+        LocalRippleConfiguration provides null
+    ) {
+        MaterialTheme(colorScheme = colorScheme, content = content)
+    }
 }
