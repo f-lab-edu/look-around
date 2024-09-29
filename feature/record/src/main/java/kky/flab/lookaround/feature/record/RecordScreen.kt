@@ -1,6 +1,7 @@
 package kky.flab.lookaround.feature.record
 
 import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +45,7 @@ fun RecordScreen(
 
     var dialogType by remember { mutableStateOf<RecordDialogType>(RecordDialogType.Dismiss) }
 
-    when(dialogType) {
+    when (dialogType) {
         RecordDialogType.Dismiss -> {}
         is RecordDialogType.RecordDelete -> {
             LookaroundAlertDialog(
@@ -108,10 +109,8 @@ internal fun RecordScreen(
                 is RecordUiState.Result -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(
-                            horizontal = 16.dp,
-                            vertical = 10.dp
-                        )
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(uiState.records) { record ->
                             RecordCard(

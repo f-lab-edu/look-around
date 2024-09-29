@@ -47,7 +47,7 @@ internal class MainBottomNavigationScopeImpl : MainBottomNavigationScope {
 
                 val labelColor =
                     if (selected) MaterialTheme.colorScheme.onSurface
-                    else MaterialTheme.colorScheme.surfaceVariant
+                    else MaterialTheme.colorScheme.onSurfaceVariant
 
                 Icon(
                     painter = painterResource(iconDrawableResId),
