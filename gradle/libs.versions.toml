@@ -57,7 +57,7 @@ poi = "3.9"
 naver-map = "3.18.0"
 
 #https://developer.android.com/develop/ui/compose/bom/bom-mapping
-androidxComposeBom = "2024.08.00"
+androidxComposeBom = "2024.09.02"
 
 #https://developer.android.com/jetpack/androidx/releases/navigation
 androidxComposeNavigation = "2.8.0"
