@@ -61,7 +61,8 @@ val homeScreenPermissions = arrayOf(
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onShowSnackBar: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -117,7 +118,7 @@ fun HomeScreen(
             if (isGranted) {
                 showAlertDialog = HomeDialogType.StartRecord
             } else {
-                /* 스낵바 */
+                onShowSnackBar("서비스를 이용하기 위해 권한을 허용해주세요.")
             }
         }
 
@@ -147,12 +148,17 @@ fun HomeScreen(
 
         HomeDialogType.LoadWeatherPermission -> LookaroundAlertDialog(
             text = stringResource(R.string.request_location_permission_message),
-            onDismiss = { showAlertDialog = HomeDialogType.Dismiss },
+            onDismiss = {
+                viewModel.updateWeatherStateLocationFail(
+                    IllegalStateException("권한을 허용해주세요.")
+                )
+                onShowSnackBar("서비스를 이용하기 위해서 권한을 허용해주세요.")
+                showAlertDialog = HomeDialogType.Dismiss
+            },
             onConfirm = {
                 val activity = FragmentComponentManager.findActivity(context) as Activity
                 val shouldShowPermissionRationale = homeScreenPermissions
                     .map { ActivityCompat.shouldShowRequestPermissionRationale(activity, it) }
-                    .onEach { Log.d("HomeScreen", it.toString()) }
                     .any { it } // 하나 이상의 Permission이 근거 메세지를 보여줄 수 있다면
 
                 // 앱 최초 설치 시 shouldShowPermissionRationale과 hasAskedLocationPermission이 false
@@ -197,7 +203,9 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect {
             when (it) {
-                is Effect.Error -> { /* 스낵바 */ }
+                is Effect.Error -> {
+                    onShowSnackBar(it.message)
+                }
 
 
                 Effect.StartRecordingService -> {
