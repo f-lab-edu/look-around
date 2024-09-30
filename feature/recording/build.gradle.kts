@@ -13,4 +13,5 @@ android {
 dependencies {
     implementation(libs.google.location)
     implementation(libs.naver.map)
+    implementation(libs.navermap.compose)
 }

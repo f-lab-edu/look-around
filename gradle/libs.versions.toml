@@ -71,6 +71,9 @@ landscapist = "2.3.8"
 # https://github.com/Kotlin/kotlinx.serialization
 kotlinxSerializationJson = "1.7.2"
 
+#https://github.com/fornewid/naver-map-compose/releases/tag/v1.5.7
+navermapCompose = "1.5.7"
+
 [libraries]
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -125,6 +128,8 @@ coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-c
 
 landscapist-bom = { group = "com.github.skydoves", name = "landscapist-bom", version.ref = "landscapist" }
 landscapist-coil = { group = "com.github.skydoves", name = "landscapist-coil" }
+
+navermap-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "navermapCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
