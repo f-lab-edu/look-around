@@ -8,6 +8,7 @@ plugins {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
+    implementation(project(":core:ui-navigation"))
 
     implementation(findLibrary("androidx.core.ktx"))
     implementation(findLibrary("androidx.appcompat"))
