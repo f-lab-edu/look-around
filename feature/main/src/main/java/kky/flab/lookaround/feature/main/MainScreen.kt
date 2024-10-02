@@ -9,26 +9,26 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import kky.flab.lookaround.core.ui_navigation.AppNavHost
-import kky.flab.lookaround.core.ui_navigation.route.MainRoute
 import kky.flab.lookaround.feature.main.component.MainBottomNavigation
 import kky.flab.lookaround.feature.main.component.MainTabs
+import kky.flab.lookaround.feature.main.navigation.MainNavHost
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    onStartRecording: () -> Unit,
+) {
     val snackBarHostState = remember { SnackbarHostState() }
-
-    var currentTab by remember { mutableStateOf(MainTabs.Home) }
-    val navController = rememberNavController()
     val coroutineScope = rememberCoroutineScope()
+
     val onShowSnackBar: (String) -> Unit = { message ->
         coroutineScope.launch {
             snackBarHostState.showSnackbar(
@@ -38,25 +38,25 @@ fun MainScreen() {
     }
 
     MainScreen(
-        currentTab = currentTab,
-        navController = navController,
         snackBarHostState = snackBarHostState,
         onShowSnackBar = onShowSnackBar,
-        onTabChanged = { tab -> currentTab = tab }
+        onStartRecording = onStartRecording,
     )
 }
 
 @Composable
 internal fun MainScreen(
-    currentTab: MainTabs,
-    navController: NavHostController,
     snackBarHostState: SnackbarHostState,
+    navController: NavHostController = rememberNavController(),
+    onStartRecording: () -> Unit,
     onShowSnackBar: (String) -> Unit,
-    onTabChanged: (MainTabs) -> Unit,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         bottomBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
             MainBottomNavigation(
                 modifier = Modifier.navigationBarsPadding()
             ) {
@@ -64,21 +64,14 @@ internal fun MainScreen(
                     bottomNavigationItem(
                         iconDrawableResId = tab.iconResourceId,
                         label = tab.label,
-                        selected = currentTab == tab,
+                        selected = currentDestination?.hasRoute(tab.route::class) == true,
                         onClick = {
-                            when(tab) {
-                                MainTabs.Home -> {
-                                    navController.navigate(MainRoute.Home)
-                                    onTabChanged(tab)
+                            navController.navigate(tab.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                                MainTabs.Record -> {
-                                    navController.navigate(MainRoute.Record)
-                                    onTabChanged(tab)
-                                }
-                                MainTabs.Setting -> {
-                                    navController.navigate(MainRoute.Setting)
-                                    onTabChanged(tab)
-                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
                         }
                     )
@@ -90,9 +83,10 @@ internal fun MainScreen(
             .fillMaxSize()
             .padding(paddingValue)
         ) {
-            AppNavHost(
+            MainNavHost(
                 navController = navController,
-                onShowSnackBar = onShowSnackBar
+                onStartRecording = onStartRecording,
+                onShowSnackBar = onShowSnackBar,
             )
         }
     }

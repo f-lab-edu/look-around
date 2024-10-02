@@ -21,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.feature.home.R
-import kky.flab.lookaround.feature.recording.RecordingActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

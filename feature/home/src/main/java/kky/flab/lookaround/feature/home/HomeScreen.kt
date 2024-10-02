@@ -62,6 +62,7 @@ val homeScreenPermissions = arrayOf(
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    onStartRecording: () -> Unit,
     onShowSnackBar: (String) -> Unit,
 ) {
     val context = LocalContext.current

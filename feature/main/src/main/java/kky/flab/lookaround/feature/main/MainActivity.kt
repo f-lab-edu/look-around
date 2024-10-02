@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.ui.theme.LookaroundTheme
+import kky.flab.lookaround.feature.main.navigation.LookaroundApp
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             LookaroundTheme(
                 darkTheme = darkTheme
             ) {
-                MainScreen()
+                LookaroundApp()
             }
         }
     }
