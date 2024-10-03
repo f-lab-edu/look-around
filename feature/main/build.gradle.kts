@@ -15,7 +15,9 @@ dependencies {
     implementation(projects.feature.record)
     implementation(projects.feature.setting)
     implementation(projects.feature.recording)
-    implementation(projects.core.uiNavigation)
+
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.google.location)
 
     implementation(libs.android.navigation.fragment)
     implementation(libs.android.navigation.ui)

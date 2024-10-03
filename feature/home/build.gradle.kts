@@ -24,6 +24,5 @@ android {
 dependencies {
     implementation(projects.feature.recording)
 
-    implementation(libs.androidx.lifecycle.service)
     implementation(libs.google.location)
 }

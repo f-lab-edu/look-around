@@ -7,5 +7,5 @@ sealed interface AppRoute {
     data object Main : AppRoute
 
     @Serializable
-    data object Recording : AppRoute
+    data class Recording(val askFinish: Boolean) : AppRoute
 }

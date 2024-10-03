@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RecordingScreen(
     viewModel: RecordingViewModel = hiltViewModel(),
+    askFinish: Boolean,
     onFinish: () -> Unit,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -62,7 +63,7 @@ fun RecordingScreen(
 
     var windowInit by remember { mutableStateOf(false) }
 
-    var showRecordingFinishDialog by remember { mutableStateOf(false) }
+    var showRecordingFinishDialog by remember { mutableStateOf(askFinish) }
 
     if (showRecordingFinishDialog) {
         LookaroundAlertDialog(

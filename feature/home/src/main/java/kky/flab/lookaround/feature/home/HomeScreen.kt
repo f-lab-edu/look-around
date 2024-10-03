@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -48,8 +47,6 @@ import kky.flab.lookaround.feature.home.model.Effect
 import kky.flab.lookaround.feature.home.model.SummaryUiState
 import kky.flab.lookaround.feature.home.model.UiState
 import kky.flab.lookaround.feature.home.model.WeatherUiState
-import kky.flab.lookaround.feature.home.service.RecordService
-import kky.flab.lookaround.feature.recording.RecordingActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,7 +59,8 @@ val homeScreenPermissions = arrayOf(
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onStartRecording: () -> Unit,
+    onStartRecordingService: () -> Unit,
+    onRouteRecording: () -> Unit,
     onShowSnackBar: (String) -> Unit,
 ) {
     val context = LocalContext.current
@@ -210,14 +208,8 @@ fun HomeScreen(
 
 
                 Effect.StartRecordingService -> {
-                    context.startForegroundService(
-                        Intent(
-                            context,
-                            RecordService::class.java
-                        )
-                    )
-
-                    context.startActivity(Intent(context, RecordingActivity::class.java))
+                    onStartRecordingService()
+                    onRouteRecording()
                 }
             }
         }
@@ -227,7 +219,7 @@ fun HomeScreen(
         state = state,
         onStartWalking = {
             if (state.recording) {
-                context.startActivity(Intent(context, RecordingActivity::class.java))
+                onRouteRecording()
             } else {
                 recordPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION

@@ -11,15 +11,17 @@ import kky.flab.lookaround.feature.setting.navigation.settingGraph
 @Composable
 fun MainNavHost(
     navController: NavHostController,
+    onStartRecordingService: () -> Unit,
+    onRouteRecording: () -> Unit,
     onShowSnackBar: (String) -> Unit,
-    onStartRecording: () -> Unit,
 ) {
     NavHost(
         navController = navController,
         startDestination = MainRoute.Home
     ) {
         homeGraph(
-            onRouteRecordingScreen = onStartRecording,
+            onStartRecordingService = onStartRecordingService,
+            onRouteRecording = onRouteRecording,
             onShowSnackBar = onShowSnackBar,
         )
 

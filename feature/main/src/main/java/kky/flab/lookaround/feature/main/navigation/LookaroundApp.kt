@@ -17,7 +17,7 @@ fun LookaroundApp() {
     ) {
         composable<AppRoute.Main> {
             MainScreen {
-                navController.navigate(AppRoute.Recording)
+                navController.navigate(AppRoute.Recording(askFinish = false))
             }
         }
 
