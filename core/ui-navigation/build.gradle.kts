@@ -9,10 +9,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.home)
-    implementation(projects.feature.record)
-    implementation(projects.feature.setting)
-
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.android.navigation.fragment)

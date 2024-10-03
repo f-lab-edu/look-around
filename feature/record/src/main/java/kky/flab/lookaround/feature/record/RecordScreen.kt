@@ -37,7 +37,7 @@ import kky.flab.lookaround.feature.record.model.RecordUiState
 import kky.flab.lookaround.feature.recording.ModifyRecordActivity
 
 @Composable
-fun RecordScreen(
+internal fun RecordScreen(
     viewModel: RecordViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
