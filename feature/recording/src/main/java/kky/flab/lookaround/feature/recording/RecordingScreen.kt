@@ -4,9 +4,7 @@ package kky.flab.lookaround.feature.recording
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -18,8 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +44,7 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PathOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import kky.flab.lookaround.core.ui.component.LookaroundAlertDialog
+import kky.flab.lookaround.core.ui.theme.LocalDarkThemeProvider
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
 import kky.flab.lookaround.feature.recording.component.RecordingInfoRow
 import kky.flab.lookaround.feature.recording.model.RecordingEffect
@@ -56,12 +55,11 @@ import kotlinx.coroutines.launch
 fun RecordingScreen(
     viewModel: RecordingViewModel = hiltViewModel(),
     askFinish: Boolean,
-    onFinish: () -> Unit,
+    onFinish: (Long) -> Unit,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val time by viewModel.timer.collectAsStateWithLifecycle(initialValue = 0)
 
-    var windowInit by remember { mutableStateOf(false) }
+    val time by viewModel.timer.collectAsStateWithLifecycle(initialValue = 0)
 
     var showRecordingFinishDialog by remember { mutableStateOf(askFinish) }
 
@@ -72,15 +70,19 @@ fun RecordingScreen(
             onConfirm = { viewModel.complete() }
         )
     }
+    val localView = LocalView.current
+    val darkTheme = LocalDarkThemeProvider.current
 
-    if (!windowInit) {
-        val view = LocalView.current
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+    DisposableEffect(localView, darkTheme) {
+        val window = (localView.context as Activity).window
+        window.statusBarColor = Color.Transparent.toArgb()
+        WindowCompat.getInsetsController(window, localView).isAppearanceLightStatusBars = true
+
+        onDispose {
+            window.statusBarColor = if (darkTheme) Color.Black.toArgb() else Color.White.toArgb()
+            WindowCompat.getInsetsController(window, localView).isAppearanceLightStatusBars =
+                !darkTheme
         }
-        windowInit = true
     }
 
     LaunchedEffect(Unit) {
