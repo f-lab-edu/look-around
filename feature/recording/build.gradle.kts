@@ -14,4 +14,7 @@ dependencies {
     implementation(libs.google.location)
     implementation(libs.naver.map)
     implementation(libs.navermap.compose)
+
+    implementation(libs.landscapist.bom)
+    implementation(libs.landscapist.coil)
 }
