@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kky.flab.lookaround.core.domain.model.Config
+import kky.flab.lookaround.core.ui.component.LookaroundTopBar
 
 @Composable
 internal fun SettingScreen(
@@ -41,19 +42,9 @@ internal fun SettingScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "설정",
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
-            )
-        }
+        LookaroundTopBar(
+            title = "설정"
+        )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier

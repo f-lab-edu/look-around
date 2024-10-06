@@ -22,12 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kky.flab.lookaround.core.ui.component.LookaroundAlertDialog
+import kky.flab.lookaround.core.ui.component.LookaroundTopBar
 import kky.flab.lookaround.core.ui.theme.LookaroundTheme
 import kky.flab.lookaround.feature.record.component.RecordCard
 import kky.flab.lookaround.feature.record.model.RecordUiModel
@@ -79,19 +79,7 @@ internal fun RecordScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(
-                text = "내 산책",
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
-            )
-        }
+        LookaroundTopBar(title = "내 산책")
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
