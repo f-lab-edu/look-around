@@ -8,4 +8,7 @@ sealed interface AppRoute {
 
     @Serializable
     data class Recording(val askFinish: Boolean) : AppRoute
+
+    @Serializable
+    data class ModifyRecord(val id: Long) : AppRoute
 }

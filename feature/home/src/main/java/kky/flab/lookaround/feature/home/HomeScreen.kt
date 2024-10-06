@@ -217,7 +217,7 @@ fun HomeScreen(
 
     HomeScreen(
         state = state,
-        onStartWalking = {
+        onRouteRecording = {
             if (state.recording) {
                 onRouteRecording()
             } else {
@@ -242,7 +242,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     state: UiState,
-    onStartWalking: () -> Unit,
+    onRouteRecording: () -> Unit,
     onWeatherRetry: () -> Unit,
     onClickFilter: () -> Unit,
     modifier: Modifier = Modifier,
@@ -255,7 +255,7 @@ fun HomeScreen(
     ) {
         RecordingStateCard(
             recording = state.recording,
-            onStartWalking = onStartWalking,
+            onStartWalking = onRouteRecording,
         )
         Spacer(modifier = Modifier.height(16.dp))
         WeatherCard(
@@ -304,7 +304,7 @@ fun HomeScreenPreview() {
                     )
                 ),
             ),
-            onStartWalking = {},
+            onRouteRecording = {},
             onWeatherRetry = {},
             onClickFilter = {},
         )

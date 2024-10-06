@@ -52,8 +52,6 @@ class HomeViewModel @Inject constructor(
 
     private var cachedConfig: Config = Config.Default
 
-    val config = configRepository.configFlow
-
     init {
         recordRepository.flowRecords()
             .catch {
