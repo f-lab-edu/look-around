@@ -1,3 +1,5 @@
 <resources>
     <string name="end_recording_message">산책을 종료하시겠습니까?</string>
+    <string name="add_photo">사진을 추가해보세요.</string>
+    <string name="add_memo">산책하면서 느낀 기분을 메모해보세요.</string>
 </resources>

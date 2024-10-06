@@ -9,6 +9,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
@@ -31,6 +32,8 @@ val DarkColorScheme = darkColorScheme(
     onSurfaceVariant = LightGray,
 )
 
+val LocalDarkThemeProvider = staticCompositionLocalOf { false }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LookaroundTheme(
@@ -50,7 +53,8 @@ fun LookaroundTheme(
     window.navigationBarColor = colorScheme.background.toArgb()
 
     CompositionLocalProvider(
-        LocalRippleConfiguration provides null
+        LocalRippleConfiguration provides null,
+        LocalDarkThemeProvider provides darkTheme,
     ) {
         MaterialTheme(colorScheme = colorScheme, content = content)
     }

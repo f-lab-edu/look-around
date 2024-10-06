@@ -14,6 +14,7 @@ fun MainNavHost(
     onStartRecordingService: () -> Unit,
     onRouteRecording: () -> Unit,
     onShowSnackBar: (String) -> Unit,
+    onModifyRecord: (Long) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -25,7 +26,7 @@ fun MainNavHost(
             onShowSnackBar = onShowSnackBar,
         )
 
-        recordGraph()
+        recordGraph(onModifyClick = onModifyRecord)
 
         settingGraph()
     }

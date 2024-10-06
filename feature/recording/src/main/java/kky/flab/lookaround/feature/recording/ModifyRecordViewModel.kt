@@ -28,7 +28,7 @@ class ModifyRecordViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<ModifyRecordUiState> =
-        MutableStateFlow(ModifyRecordUiState.Result(Record.EMPTY))
+        MutableStateFlow(ModifyRecordUiState.Empty)
     val state: StateFlow<ModifyRecordUiState> = _state.asStateFlow()
 
     private val _effect: MutableSharedFlow<ModifyRecordEffect> = MutableSharedFlow(
