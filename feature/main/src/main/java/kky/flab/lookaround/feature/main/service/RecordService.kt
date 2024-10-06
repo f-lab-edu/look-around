@@ -103,19 +103,20 @@ class RecordService : LifecycleService() {
 
         val channelId = getString(R.string.foreground_service_notification_channel_id)
 
-        val basePath = "lookaround://recording"
         val notificationClickIntent = Intent(
             this,
             MainActivity::class.java
         ).apply {
-            data = "$basePath/false".toUri()
+            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            data = "lookaround://recording/false".toUri()
         }
 
         val stopIntent = Intent(
             this,
             MainActivity::class.java
         ).apply {
-            data = "$basePath/true".toUri()
+            setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            data = "lookaround://recording/true".toUri()
         }
 
         val notification = NotificationCompat.Builder(this, channelId)

@@ -1,5 +1,7 @@
 package kky.flab.lookaround.feature.main
 
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -12,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -20,11 +23,13 @@ import androidx.navigation.compose.rememberNavController
 import kky.flab.lookaround.feature.main.component.MainBottomNavigation
 import kky.flab.lookaround.feature.main.component.MainTabs
 import kky.flab.lookaround.feature.main.navigation.MainNavHost
+import kky.flab.lookaround.feature.main.service.RecordService
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    onStartRecording: () -> Unit,
+    onRouteRecording: () -> Unit,
+    onModifyRecord: (Long) -> Unit,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -40,17 +45,32 @@ fun MainScreen(
     MainScreen(
         snackBarHostState = snackBarHostState,
         onShowSnackBar = onShowSnackBar,
-        onStartRecording = onStartRecording,
+        onRouteRecording = onRouteRecording,
+        onModifyRecord = onModifyRecord,
     )
 }
 
 @Composable
-internal fun MainScreen(
+private fun MainScreen(
     snackBarHostState: SnackbarHostState,
     navController: NavHostController = rememberNavController(),
-    onStartRecording: () -> Unit,
+    onRouteRecording: () -> Unit,
+    onModifyRecord: (Long) -> Unit,
     onShowSnackBar: (String) -> Unit,
 ) {
+    val context = LocalContext.current
+
+    val onStartRecordingService = {
+        context.startForegroundService(
+            Intent(
+                context,
+                RecordService::class.java
+            )
+        )
+
+        Unit
+    }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         bottomBar = {
@@ -85,8 +105,10 @@ internal fun MainScreen(
         ) {
             MainNavHost(
                 navController = navController,
-                onStartRecording = onStartRecording,
+                onStartRecordingService = onStartRecordingService,
+                onRouteRecording = onRouteRecording,
                 onShowSnackBar = onShowSnackBar,
+                onModifyRecord = onModifyRecord,
             )
         }
     }

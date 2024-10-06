@@ -67,7 +67,10 @@ fun RecordingScreen(
         LookaroundAlertDialog(
             text = stringResource(R.string.end_recording_message),
             onDismiss = { showRecordingFinishDialog = false },
-            onConfirm = { viewModel.complete() }
+            onConfirm = {
+                showRecordingFinishDialog = false
+                viewModel.complete()
+            }
         )
     }
     val localView = LocalView.current
@@ -88,7 +91,7 @@ fun RecordingScreen(
     LaunchedEffect(Unit) {
         viewModel.effect.collect {
             when (it) {
-                is RecordingEffect.SavedRecording -> onFinish()
+                is RecordingEffect.SavedRecording -> onFinish(it.id)
             }
         }
     }

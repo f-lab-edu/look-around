@@ -1,6 +1,5 @@
 package kky.flab.lookaround.feature.record
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,14 +32,13 @@ import kky.flab.lookaround.core.ui.theme.LookaroundTheme
 import kky.flab.lookaround.feature.record.component.RecordCard
 import kky.flab.lookaround.feature.record.model.RecordUiModel
 import kky.flab.lookaround.feature.record.model.RecordUiState
-import kky.flab.lookaround.feature.recording.ModifyRecordActivity
 
 @Composable
 internal fun RecordScreen(
-    viewModel: RecordViewModel = hiltViewModel()
+    viewModel: RecordViewModel = hiltViewModel(),
+    onModifyClick: (Long) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     var dialogType by remember { mutableStateOf<RecordDialogType>(RecordDialogType.Dismiss) }
 
@@ -65,12 +62,7 @@ internal fun RecordScreen(
     RecordScreen(
         uiState,
         onModifyClick = { record ->
-            context.startActivity(
-                Intent(
-                    context,
-                    ModifyRecordActivity::class.java
-                ).putExtra(ModifyRecordActivity.EXTRA_RECORD_ID, record.id)
-            )
+            onModifyClick(record.id)
         },
         onDeleteClick = { record ->
             dialogType = RecordDialogType.RecordDelete(record)
