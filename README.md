@@ -4,16 +4,14 @@
 
 # 아키텍처
 
-안드로이드 권장 아키텍처 기반으로 작성하였습니다.  
+- ### CleanArchitecture
+![CleanArchitecture](https://github.com/user-attachments/assets/d7d56f3e-021e-46c5-b085-34776e224b61)
 
-- ### 안드로이드 권장 아키텍처
-![권장 아키텍처](https://github.com/user-attachments/assets/22737d5b-5d3c-4c97-afab-c630904b884f)
-
-- ### MVVM 패턴
+- ### MVVM
 ![MVVM](https://github.com/user-attachments/assets/7395af0b-90c8-44a9-8100-1832d3cbdcd8)
 
 - ### 멀티 모듈화
-![Modulization](https://github.com/user-attachments/assets/346d1b44-00d7-4f84-a7ed-1c2624474d50)
+![Modulization](https://github.com/user-attachments/assets/b3f10000-4bad-405a-8cf5-27764b9d7dee)
 
 
 # 스크린샷
