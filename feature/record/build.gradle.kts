@@ -11,8 +11,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.recording)
-
     implementation(libs.landscapist.bom)
     implementation(libs.landscapist.coil)
 }
