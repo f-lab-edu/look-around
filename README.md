@@ -1,6 +1,14 @@
-# 나만의 산책 기록을 위한 어플리케이션
+# Lookaround
 
 나의 산책경로를 기록하고 메모와 사진을 남길 수 있습니다 🚶🏻
+
+# 기능 소개
+
+- ForegroundService를 통해 사용자의 산책 경로를 트랙킹합니다.
+- 현재 날씨를 공공데이터포털 기상예보API를 사용해 보여줍니다.
+- 저장된 산책경로와 메모, 산책 시 찍은 사진을 리스트로 보여줍니다.
+- 일주일 or 한달 or 일년 단위 산책 요약을 보여줍니다.
+- DarkMode 변경이 가능합니다.
 
 # 아키텍처
 
@@ -23,14 +31,6 @@
 <p align="center">  <img src="https://github.com/user-attachments/assets/7ba4c91d-c2d6-4dff-b3c0-f356672b0fa0" align="center" width="32%">  
   <img src="https://github.com/user-attachments/assets/4a077f05-1ddb-4150-bffb-39e538cbf3e4" align="center" width="32%">  
 </p>
-
-
-# 기능 소개
-
-- ForegroundService를 통해 사용자의 산책 경로를 트랙킹합니다.
-- 현재 날씨를 공공데이터포털 기상예보API를 사용해 보여줍니다.
-- 저장된 산책경로와 메모, 산책 시 찍은 사진을 리스트로 보여줍니다.
-- DarkMode 변경이 가능합니다.
 
 # 사용 기술
 
