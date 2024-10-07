@@ -22,7 +22,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.recording)
-
     implementation(libs.google.location)
 }
