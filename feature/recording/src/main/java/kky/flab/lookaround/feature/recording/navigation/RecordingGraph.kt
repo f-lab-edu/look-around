@@ -14,9 +14,9 @@ fun NavGraphBuilder.recordingGraph(
 ) {
     composable<AppRoute.Recording>(
         deepLinks = listOf(
-            navDeepLink<AppRoute.Recording>(
-                basePath = "lookaround://recording"
-            )
+            navDeepLink {
+                uriPattern = "lookaround://recording?askFinish={askFinish}"
+            }
         )
     ) {
         val askFinish = it.toRoute<AppRoute.Recording>().askFinish
