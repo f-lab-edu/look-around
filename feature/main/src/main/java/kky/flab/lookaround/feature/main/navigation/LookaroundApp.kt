@@ -1,6 +1,7 @@
 package kky.flab.lookaround.feature.main.navigation
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.core.util.Consumer
@@ -19,7 +20,14 @@ fun LookaroundApp() {
 
     DisposableEffect(activity, navController) {
         val onNewIntentConsumer = Consumer<Intent> {
-            navController.handleDeepLink(it)
+            val askFinish =
+                it.data?.getQueryParameter("askFinish")?.toBoolean()
+                ?: false
+            navController.navigate(
+                AppRoute.Recording(
+                    askFinish = askFinish
+                )
+            )
         }
 
         activity.addOnNewIntentListener(onNewIntentConsumer)

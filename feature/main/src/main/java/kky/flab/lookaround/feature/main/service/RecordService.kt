@@ -22,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.feature.home.R
-import kky.flab.lookaround.feature.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,27 +102,21 @@ class RecordService : LifecycleService() {
 
         val channelId = getString(R.string.foreground_service_notification_channel_id)
 
-        val notificationClickIntent = Intent(
-            this,
-            MainActivity::class.java
-        ).apply {
-            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            data = "lookaround://recording/false".toUri()
-        }
+        val clickIntent = Intent(
+            Intent.ACTION_VIEW,
+            "lookaround://recording?askFinish=false".toUri()
+        )
 
         val stopIntent = Intent(
-            this,
-            MainActivity::class.java
-        ).apply {
-            setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            data = "lookaround://recording/true".toUri()
-        }
+            Intent.ACTION_VIEW,
+            "lookaround://recording?askFinish=true".toUri()
+        )
 
         val notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("산책을 기록중입니다.")
             .setContentText("산책을 끝내고 싶다면 아래 '종료' 버튼을 눌러주세요.")
             .setSmallIcon(R.drawable.sunny)
-            .setContentIntent(getPendingIntent(1, notificationClickIntent))
+            .setContentIntent(getPendingIntent(1, clickIntent))
             .addAction(R.drawable.baseline_stop_24, "산책 종료", getPendingIntent(2, stopIntent))
             .setOngoing(true)
             .build()
