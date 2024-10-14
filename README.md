@@ -42,4 +42,4 @@
 * AAC ViewModel
 * Hilt
 * NaverMap
-* ViewBinding
+* Compose
