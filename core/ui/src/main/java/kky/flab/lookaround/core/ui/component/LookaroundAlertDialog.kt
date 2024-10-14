@@ -35,7 +35,8 @@ fun LookaroundAlertDialog(
             )
         },
         text = { Text(text = text) },
+        containerColor = MaterialTheme.colorScheme.surface,
         textContentColor = MaterialTheme.colorScheme.onSurface,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
     )
 }
