@@ -23,7 +23,7 @@ data class RecordUiModel(
     fun toDomain(): Record = Record(
         id = id,
         memo =  memo,
-        imageUri = imageUri?.toString() ?: "",
+        image = imageUri?.toString() ?: "",
         startTimeStamp = startTimeStamp,
         endTimeStamp = endTimeStamp,
         path = path,
@@ -34,7 +34,7 @@ data class RecordUiModel(
 fun Record.toUiModel(): RecordUiModel = RecordUiModel(
     id = id,
     memo =  memo,
-    imageUri = if (imageUri.isNotEmpty()) Uri.parse(imageUri) else null,
+    imageUri = if (image.isNotEmpty()) Uri.parse(image) else null,
     date = dateFormat.format(startTimeStamp),
     runTime = (endTimeStamp - startTimeStamp).millsToTimeFormat(),
     startTimeStamp = startTimeStamp,

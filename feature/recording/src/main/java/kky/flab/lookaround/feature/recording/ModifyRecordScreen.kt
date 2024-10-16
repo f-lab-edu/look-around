@@ -2,7 +2,6 @@ package kky.flab.lookaround.feature.recording
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -139,7 +138,7 @@ private fun ModifyRecordScreen(
                     mutableStateOf(
                         (uiState as? ModifyRecordUiState.Result)
                             ?.record
-                            ?.imageUri
+                            ?.image
                             ?.run {
                                 if (isNotEmpty()) toUri()
                                 else null
@@ -278,7 +277,7 @@ private fun ModifyRecordScreenPreview() {
             record = Record(
                 id = 0,
                 memo = "preview memo",
-                imageUri = "",
+                image = "",
                 path = emptyList(),
                 startTimeStamp = 0,
                 endTimeStamp = 0,

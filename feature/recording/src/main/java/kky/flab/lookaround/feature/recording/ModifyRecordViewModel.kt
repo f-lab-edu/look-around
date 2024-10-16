@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kky.flab.lookaround.core.domain.ConfigRepository
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.model.Config
-import kky.flab.lookaround.core.domain.model.Record
 import kky.flab.lookaround.feature.recording.model.ModifyRecordEffect
 import kky.flab.lookaround.feature.recording.model.ModifyRecordUiState
 import kotlinx.coroutines.channels.BufferOverflow
@@ -54,7 +53,7 @@ class ModifyRecordViewModel @Inject constructor(
         val state = _state.value as ModifyRecordUiState.Result
         val update = state.record.copy(
             memo = memo,
-            imageUri = uri?.toString() ?: ""
+            image = uri?.toString() ?: ""
         )
 
         viewModelScope.launch {
