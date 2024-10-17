@@ -1,8 +1,12 @@
 package kky.flab.lookaround.core.data
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.icu.util.Calendar
 import android.icu.util.GregorianCalendar
 import android.location.Location
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kky.flab.lookaround.core.data.mapper.toData
 import kky.flab.lookaround.core.data.mapper.toDomain
 import kky.flab.lookaround.core.database.dao.RecordDao
@@ -17,11 +21,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Date
 import javax.inject.Inject
 
 internal class RecordRepositoryImpl @Inject constructor(
-    private val recordDao: RecordDao
+    private val recordDao: RecordDao,
+    @ApplicationContext val context: Context,
 ) : RecordRepository {
 
     private val _recording: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -31,9 +38,7 @@ internal class RecordRepositoryImpl @Inject constructor(
     override val recordingStateFlow: StateFlow<Record> = _recordingState.asStateFlow()
 
     override suspend fun saveRecord(record: Record): Long {
-        return recordDao.insertRecord(
-            record.toData()
-        )
+        return recordDao.insertRecord(record.toData())
     }
 
     override fun flowRecords(): Flow<List<Record>> =
@@ -44,9 +49,53 @@ internal class RecordRepositoryImpl @Inject constructor(
     override suspend fun getRecord(id: Long): Record = recordDao.getRecord(id).toDomain()
 
     override suspend fun updateRecord(record: Record) {
+        //이미지가 저장되어 있는 이미지가 아닐 경우 새롭게 저장한다.
+        var newImage: String? = null
+
+        if (!record.image.startsWith(context.filesDir.absolutePath)) {
+            newImage = saveImage(record.image)
+        }
+
         recordDao.updateRecord(
-            record.toData()
+            record
+                .copy(image = newImage ?: record.image)
+                .toData()
         )
+    }
+
+    private fun saveImage(imagePath: String): String {
+        val file = File(imagePath)
+
+        val maxSize = 1024
+        val imageDecoderSource = ImageDecoder.createSource(file)
+        val bitmap = ImageDecoder.decodeBitmap(imageDecoderSource) { decoder, info, _ ->
+            val (originalWidth, originalHeight) = info.size.width to info.size.height
+
+            if (originalWidth > maxSize || originalHeight > maxSize) {
+                val aspectRatio = originalWidth.toFloat() / originalHeight.toFloat()
+
+                if (originalWidth > originalHeight) {
+                    val scaledHeight = (maxSize / aspectRatio).toInt()
+                    decoder.setTargetSize(maxSize, scaledHeight)
+                } else {
+                    val scaledWidth = (maxSize * aspectRatio).toInt()
+                    decoder.setTargetSize(scaledWidth, maxSize)
+                }
+            }
+        }
+
+        val imageDir = File("${context.filesDir.path}/RecordImage")
+        if (imageDir.exists().not()) {
+            imageDir.mkdirs()
+        }
+
+        val newImage = File(imageDir, "record_image_${file.name}")
+
+        FileOutputStream(newImage).use {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+        }
+
+        return newImage.absolutePath
     }
 
     override suspend fun deleteRecord(record: Record) {
@@ -163,5 +212,6 @@ internal class RecordRepositoryImpl @Inject constructor(
 
     companion object {
         const val MIN_WALK_DISTANCE = 3
+        const val INTERNAL_STORAGE_PATH = "/data/data/kky.f"
     }
 }
