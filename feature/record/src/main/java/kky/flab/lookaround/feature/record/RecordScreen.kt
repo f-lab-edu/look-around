@@ -120,7 +120,7 @@ fun RecordScreenPreview() {
                     RecordUiModel(
                         id = 0,
                         memo = "Preview Memo",
-                        imageUri = null,
+                        image = null,
                         date = "2024.01.11",
                         runTime = "24:54",
                         startTimeStamp = 0,

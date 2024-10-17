@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -32,9 +31,9 @@ internal fun RecordCard(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (record.imageUri != null) {
+            if (record.image != null) {
                 CoilImage(
-                    imageModel = { record.imageUri },
+                    imageModel = { record.image },
                     imageOptions = ImageOptions(
                         requestSize = IntSize(1000, 1000)
                     ),
@@ -49,7 +48,7 @@ internal fun RecordCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(
                     horizontal = 16.dp,
-                    vertical = (if (record.imageUri != null) 10 else 16).dp,
+                    vertical = (if (record.image != null) 10 else 16).dp,
                 )
             )
             Row(
