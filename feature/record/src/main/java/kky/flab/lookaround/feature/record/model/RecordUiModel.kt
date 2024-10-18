@@ -1,9 +1,9 @@
 package kky.flab.lookaround.feature.record.model
 
-import android.net.Uri
 import kky.flab.lookaround.core.domain.model.Path
 import kky.flab.lookaround.core.domain.model.Record
 import kky.flab.lookaround.core.ui.util.millsToTimeFormat
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -12,7 +12,7 @@ val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN)
 data class RecordUiModel(
     val id: Long,
     val memo: String,
-    val imageUri: Uri?,
+    val image: File?,
     val date: String,
     val runTime: String,
     private val startTimeStamp: Long,
@@ -23,7 +23,7 @@ data class RecordUiModel(
     fun toDomain(): Record = Record(
         id = id,
         memo =  memo,
-        imageUri = imageUri?.toString() ?: "",
+        image = image?.path ?: "",
         startTimeStamp = startTimeStamp,
         endTimeStamp = endTimeStamp,
         path = path,
@@ -34,7 +34,7 @@ data class RecordUiModel(
 fun Record.toUiModel(): RecordUiModel = RecordUiModel(
     id = id,
     memo =  memo,
-    imageUri = if (imageUri.isNotEmpty()) Uri.parse(imageUri) else null,
+    image = if (image.isNotEmpty()) File(image) else null,
     date = dateFormat.format(startTimeStamp),
     runTime = (endTimeStamp - startTimeStamp).millsToTimeFormat(),
     startTimeStamp = startTimeStamp,

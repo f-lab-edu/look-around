@@ -1,13 +1,21 @@
 package kky.flab.lookaround.feature.recording
 
-import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -81,6 +89,7 @@ internal fun ModifyRecordScreen(
                 is ModifyRecordEffect.Error -> {
                     onShowSnackBar(it.message)
                 }
+
                 ModifyRecordEffect.SaveRecord -> {
                     onComplete()
                 }
@@ -93,14 +102,24 @@ internal fun ModifyRecordScreen(
         snackbarHostState = snackbarHostState,
         onClose = onComplete,
         onComplete = { memo, photoUri ->
+            var imagePath: String? = null
             if (photoUri != null) {
-                contentResolver.takePersistableUriPermission(
+                val cursor = contentResolver.query(
                     photoUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    arrayOf(MediaStore.Images.Media.DATA),
+                    null,
+                    null,
+                    null,
                 )
+                cursor?.use {
+                    if (it.moveToFirst()) {
+                        val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        imagePath = it.getString(columnIndex)
+                    }
+                }
             }
 
-            viewModel.save(memo, photoUri)
+            viewModel.save(memo, imagePath)
         },
     )
 }
@@ -132,15 +151,14 @@ private fun ModifyRecordScreen(
                     CircularProgressIndicator()
                 }
             }
+
             is ModifyRecordUiState.Result -> {
                 var memoState by remember { mutableStateOf(uiState.record.memo) }
 
                 var photoUri by remember {
                     mutableStateOf(
-                        (uiState as? ModifyRecordUiState.Result)
-                            ?.record
-                            ?.imageUri
-                            ?.run {
+                        uiState.record.image
+                            .run {
                                 if (isNotEmpty()) toUri()
                                 else null
                             }
@@ -278,7 +296,7 @@ private fun ModifyRecordScreenPreview() {
             record = Record(
                 id = 0,
                 memo = "preview memo",
-                imageUri = "",
+                image = "",
                 path = emptyList(),
                 startTimeStamp = 0,
                 endTimeStamp = 0,

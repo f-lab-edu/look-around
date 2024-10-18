@@ -1,13 +1,11 @@
 package kky.flab.lookaround.feature.recording
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kky.flab.lookaround.core.domain.ConfigRepository
 import kky.flab.lookaround.core.domain.RecordRepository
 import kky.flab.lookaround.core.domain.model.Config
-import kky.flab.lookaround.core.domain.model.Record
 import kky.flab.lookaround.feature.recording.model.ModifyRecordEffect
 import kky.flab.lookaround.feature.recording.model.ModifyRecordUiState
 import kotlinx.coroutines.channels.BufferOverflow
@@ -46,7 +44,7 @@ class ModifyRecordViewModel @Inject constructor(
         }
     }
 
-    fun save(memo: String, uri: Uri?) {
+    fun save(memo: String, imagePath: String?) {
         if (_state.value !is ModifyRecordUiState.Result) {
             return
         }
@@ -54,7 +52,7 @@ class ModifyRecordViewModel @Inject constructor(
         val state = _state.value as ModifyRecordUiState.Result
         val update = state.record.copy(
             memo = memo,
-            imageUri = uri?.toString() ?: ""
+            image = imagePath ?: ""
         )
 
         viewModelScope.launch {
