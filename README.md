@@ -22,9 +22,10 @@
 ![Modulization](https://github.com/user-attachments/assets/b3f10000-4bad-405a-8cf5-27764b9d7dee)
 
 
+
 # 스크린샷
 
-<p align="center">  <img src="https://github.com/user-attachments/assets/0e0558ed-ad64-47ff-b51a-da7597898f9c" align="center" width="32%">  
+<p align="center">  <img src="https://github.com/user-attachments/assets/39719ba8-e4ac-4af3-9555-7c9f3f5ab17c" align="center" width="32%">  
   <img src="https://github.com/user-attachments/assets/e8642de6-6f05-4f85-a00e-49f84e6fa197" align="center" width="32%">  
   <img src="https://github.com/user-attachments/assets/b62b298e-9e3e-4c7d-8d59-7dd5b50f55ee" align="center" width="32%">  
 </p>
