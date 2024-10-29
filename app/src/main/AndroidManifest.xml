@@ -19,7 +19,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Lookaround"
         android:name=".GlobalApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31"
