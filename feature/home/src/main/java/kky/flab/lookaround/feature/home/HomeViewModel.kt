@@ -25,9 +25,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.YearMonth
+import java.time.ZoneId
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -53,7 +57,25 @@ class HomeViewModel @Inject constructor(
     private var cachedConfig: Config = Config.Default
 
     init {
+        val currentMonth = YearMonth.now().monthValue
         recordRepository.flowRecords()
+            .map { records ->
+                records.map { record ->
+                    Instant
+                        .ofEpochMilli(record.startTimeStamp)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+                }.filter { date ->
+                    date.monthValue == currentMonth
+                }
+            }
+            .onEach { dates ->
+                _state.update {
+                    it.copy(
+                        currentMonthRecordDate = dates
+                    )
+                }
+            }
             .catch {
                 _effect.tryEmit(
                     Effect.Error(
