@@ -8,12 +8,13 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import kky.flab.lookaround.core.ui.component.LookaroundAlertDialog
 import kky.flab.lookaround.core.ui.theme.LookaroundTheme
 import kky.flab.lookaround.core.ui.util.getAddress
 import kky.flab.lookaround.core.ui.util.xlsx.XlsxParser
+import kky.flab.lookaround.feature.home.component.CalendarCard
 import kky.flab.lookaround.feature.home.component.HomeSummaryFilterBottomSheet
 import kky.flab.lookaround.feature.home.component.RecordingStateCard
 import kky.flab.lookaround.feature.home.component.SummaryCard
@@ -247,22 +249,26 @@ fun HomeScreen(
     onClickFilter: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Column (
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
-            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .navigationBarsPadding()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         RecordingStateCard(
             recording = state.recording,
             onStartWalking = onRouteRecording,
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        CalendarCard(
+            modifier = Modifier.fillMaxWidth(),
+            selected = state.currentMonthRecordDate,
+            onClickDate = {}
+        )
         WeatherCard(
             uiState = state.weatherUiState,
             onRetry = onWeatherRetry
         )
-        Spacer(modifier = Modifier.height(16.dp))
         SummaryCard(
             state = state.summaryUiState,
             filter = when (state.summaryFilter) {
@@ -294,6 +300,7 @@ fun HomeScreenPreview() {
                     windSpeed = "15m/s",
                     temperatures = "16도",
                 ),
+                currentMonthRecordDate = emptyList(),
                 summaryUiState = SummaryUiState.Result(
                     Summary(
                         time = 4000,
