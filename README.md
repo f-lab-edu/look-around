@@ -25,12 +25,13 @@
 
 # 스크린샷
 
-<p align="center">  <img src="https://github.com/user-attachments/assets/39719ba8-e4ac-4af3-9555-7c9f3f5ab17c" align="center" width="32%">  
+<p align="center">  <img src="https://github.com/user-attachments/assets/ee5673b1-a85b-4439-8808-65641bedee99" align="center" width="32%">  
   <img src="https://github.com/user-attachments/assets/e8642de6-6f05-4f85-a00e-49f84e6fa197" align="center" width="32%">  
   <img src="https://github.com/user-attachments/assets/b62b298e-9e3e-4c7d-8d59-7dd5b50f55ee" align="center" width="32%">  
 </p>
 <p align="center">  <img src="https://github.com/user-attachments/assets/7ba4c91d-c2d6-4dff-b3c0-f356672b0fa0" align="center" width="32%">  
-  <img src="https://github.com/user-attachments/assets/4a077f05-1ddb-4150-bffb-39e538cbf3e4" align="center" width="32%">  
+  <img src="https://github.com/user-attachments/assets/e85f4225-1eea-4021-b109-551853235a95" align="center" width="32%">  
+  <img src="https://github.com/user-attachments/assets/17013aae-676e-493d-9a64-0b65ffd890c3" align="center" width="32%">  
 </p>
 
 # 사용 기술
