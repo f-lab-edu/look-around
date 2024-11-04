@@ -8,4 +8,3 @@ data class CalendarDate(
     val date: LocalDate,
     val isCurrentMonth: Boolean,
 )
-
