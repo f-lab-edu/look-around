@@ -128,9 +128,9 @@ private fun LaCalendarDay(
         decoration(date)
         DateText(
             date = date,
-            textStyle = TextStyle.Default.copy(
-                color = if (enable) Color.Black else Color.LightGray,
-                fontSize = 12.sp
+            textStyle = MaterialTheme.typography.bodySmall.copy(
+                color = if (enable) MaterialTheme.colorScheme.onSurface
+                else Color.Gray
             ),
             modifier = Modifier.align(Alignment.Center),
         )
